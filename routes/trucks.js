@@ -87,11 +87,13 @@ var populateDB = function() {
     ];
         
     db.collection('trucks', function(err,collection){
+       collection.remove();  //get rid of what's in there
        collection.insert(trucks, {safe:true}, function(err,result){
           if(err){
               console.log('Error populating database - '+err);
           }else{
               console.log('Populated database.');
+              collection.ensureIndex({location:"2d"})
           }
        });
     });
@@ -127,12 +129,27 @@ db.open(function(err,db){
 
 exports.findAll = function(req,res) {
     db.collection('trucks', function(err, collection){
-        collection.find({loc: {$near: [-122.418,37.77] }}).toArray(function(err, items){
+        collection.find().toArray(function(err, items){
             res.send(items);
             console.log('Found your trucks');
         });
     });
 };
+
+exports.findByLoc = function(req,res) {
+    var loc = JSON.parse(req.params.loc);
+    console.log(loc);
+    db.collection('trucks', function(err, collection){
+        collection.find({ location :
+                         { $near : loc ,
+                           $maxDistance: 100000
+                    } }).toArray(function(err, items){
+            res.send(items);
+            console.log('Found your trucks');
+        });
+    });
+};
+
 
 exports.findById = function(req,res) {
     var id = req.params.id;
