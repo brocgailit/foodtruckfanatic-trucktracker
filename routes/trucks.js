@@ -131,9 +131,10 @@ db.open(function(err,db){
 
 exports.findAll = function(req,res) {
     db.collection('trucks', function(err, collection){
-
+        var results = {truck:null};
         collection.find().toArray(function(err, items){
-            res.send(items);
+            results.truck = items;
+            res.send(results);
             console.log('Found your trucks');
         });
     });
@@ -148,6 +149,7 @@ exports.findByLoc = function(req,res) {
                          { $near : loc ,
                            $maxDistance: 100000
                     } }).toArray(function(err, items){
+                        results.food = items;
             res.send(items);
             console.log('Found your trucks');
         });
