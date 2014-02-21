@@ -4,8 +4,8 @@ var Server = mongo.Server,
     Db = mongo.Db,
     BSON = mongo.BSONPure;
     
-var server = new Server('localhost',27017, {auto_reconnect:true});
-var db = new Db('truckdb',server, {safe:false});
+var server = new Server('tracker:f00d4thouhgt@troup.mongohq.com',10033, {auto_reconnect:true});
+var db = new Db('app22402441',server, {safe:false});
 
 /* SAMPLE DATA */
 
