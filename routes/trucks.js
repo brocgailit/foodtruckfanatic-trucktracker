@@ -74,7 +74,7 @@ var populateDB = function() {
         truckName: "SW 5th and Oak",
         locationName: "SW 5th and Oak",
         phone: "",
-        locatoin: [-122.676051,45.521461]
+        location: [-122.676051,45.521461]
       },
       {
         _id: new BSON.ObjectID(9),
@@ -127,7 +127,7 @@ db.open(function(err,db){
 
 exports.findAll = function(req,res) {
     db.collection('trucks', function(err, collection){
-        collection.find().toArray(function(err, items){
+        collection.find({loc: {$near: [-122.418,37.77] }}).toArray(function(err, items){
             res.send(items);
             console.log('Found your trucks');
         });
