@@ -11,7 +11,81 @@ var db = new Db('app22402441',server, {safe:false});
 
 var populateDB = function() {
     console.log('Populating database.');
-    var trucks = [{"id":"5","business":"Aybla Grill","truckName":"Good Food Here","locationName":"Good Food Here","distance":"7751.3 mi","businessPhone":"5034903387","phone":"","latitude":"45.516551","longitude":"-122.617904"},{"id":"3","business":"The Grilled Cheese Grill","truckName":"Alberta","locationName":"Alberta","distance":"7751.7 mi","businessPhone":"5032068959","phone":"5032068959","latitude":"45.559212","longitude":"-122.65488"},{"id":"1","business":"The Grilled Cheese Grill","truckName":"Southeast","locationName":"Southeast","distance":"7752 mi","businessPhone":"5032068959","phone":"5032067018","latitude":"45.521784","longitude":"-122.637577"},{"id":"2","business":"Wolf and Bears","truckName":"Southeast","locationName":"Southeast","distance":"7752 mi","businessPhone":"5034535044","phone":"5034532872","latitude":"45.521784","longitude":"-122.637577"},{"id":"4","business":"Wolf and Bears","truckName":"North Portland","locationName":"Mississippi","distance":"7752.9 mi","businessPhone":"5034535044","phone":"5034535044","latitude":"45.551254","longitude":"-122.675811"},{"id":"7","business":"Aybla Grill","truckName":"1660 SE 3rd","locationName":"1660 SE 3rd","distance":"7753.4 mi","businessPhone":"5034903387","phone":"","latitude":"45.511102","longitude":"-122.662807"},{"id":"8","business":"Aybla Grill","truckName":"SW 5th and Oak","locationName":"SW 5th and Oak","distance":"7753.7 mi","businessPhone":"5034903387","phone":"","latitude":"45.521461","longitude":"-122.676051"},{"id":"9","business":"Aybla Grill","truckName":"SW 10th and Alder","locationName":"SW 10th and Alder","distance":"7754 mi","businessPhone":"5034903387","phone":"","latitude":"45.520563","longitude":"-122.681291"},{"id":"6","business":"Aybla Grill","truckName":"PSU","locationName":"PSU","distance":"7754.2 mi","businessPhone":"5034903387","phone":"","latitude":"45.514413","longitude":"-122.681134"}];
+    var trucks = [
+      {
+        _id: new BSON.ObjectID(1),
+        business: "Aybla Grill",
+        truckName: "PSU",
+        locationName: "PSU",
+        phone: "",
+        location: [-122.681134, 45.514413]
+      },
+      {
+        _id: new BSON.ObjectID(2),
+        business: "Aybla Grill",
+        truckName: "Good Food Here",
+        locationName: "Good Food Here",
+        phone: "",
+        location: [-122.617904,45.516551]
+      },
+      {
+        _id: new BSON.ObjectID(3),
+        business: "The Grilled Cheese Grill",
+        truckName: "Alberta",
+        locationName: "Alberta",
+        phone: "5032068959",
+        location: [-122.65488,45.559212]
+      },
+      {
+        _id: new BSON.ObjectID(4),
+        business: "The Grilled Cheese Grill",
+        truckName: "Southeast",
+        locationName: "Southeast",
+        phone: "5032067018",
+        location: [-122.637577,45.521784]
+      },
+      {
+        _id: new BSON.ObjectID(5),
+        business: "Wolf and Bears",
+        truckName: "Southeast",
+        locationName: "Southeast",
+        phone: "5034532872",
+        location: [-122.637577,45.521784]
+      },
+      {
+        _id: new BSON.ObjectID(6),
+        business: "Wolf and Bears",
+        truckName: "North Portland",
+        locationName: "Mississippi",
+        phone: "5034535044",
+        location: [-122.675811,45.551254]
+      },
+      {
+        _id: new BSON.ObjectID(7),
+        business: "Aybla Grill",
+        truckName: "1660 SE 3rd",
+        locationName: "1660 SE 3rd",
+        phone: "",
+        location:[-122.662807,45.511102]
+      },
+      {
+        _id: new BSON.ObjectID(8),
+        business: "Aybla Grill",
+        truckName: "SW 5th and Oak",
+        locationName: "SW 5th and Oak",
+        phone: "",
+        locatoin: [-122.676051,45.521461]
+      },
+      {
+        _id: new BSON.ObjectID(9),
+        "business": "Aybla Grill",
+        "truckName": "SW 10th and Alder",
+        "locationName": "SW 10th and Alder",
+        "phone": "",
+        location:[-122.681291,45.520563]
+      }
+    ];
+        
     db.collection('trucks', function(err,collection){
        collection.insert(trucks, {safe:true}, function(err,result){
           if(err){
