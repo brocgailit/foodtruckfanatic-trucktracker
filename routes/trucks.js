@@ -15,7 +15,7 @@ var populateDB = function() {
     console.log('Populating database.');
     var trucks = [
       {
-        _id: new BSON.ObjectID(1),
+        id: 1,
         business: "Aybla Grill",
         truckName: "PSU",
         locationName: "PSU",
@@ -23,7 +23,7 @@ var populateDB = function() {
         location: [-122.681134, 45.514413]
       },
       {
-        _id: new BSON.ObjectID(2),
+        id: 2,
         business: "Aybla Grill",
         truckName: "Good Food Here",
         locationName: "Good Food Here",
@@ -31,7 +31,7 @@ var populateDB = function() {
         location: [-122.617904,45.516551]
       },
       {
-        _id: new BSON.ObjectID(3),
+        id: 3,
         business: "The Grilled Cheese Grill",
         truckName: "Alberta",
         locationName: "Alberta",
@@ -39,7 +39,7 @@ var populateDB = function() {
         location: [-122.65488,45.559212]
       },
       {
-        _id: new BSON.ObjectID(4),
+        id: 4,
         business: "The Grilled Cheese Grill",
         truckName: "Southeast",
         locationName: "Southeast",
@@ -47,7 +47,7 @@ var populateDB = function() {
         location: [-122.637577,45.521784]
       },
       {
-        _id: new BSON.ObjectID(5),
+        id: 5,
         business: "Wolf and Bears",
         truckName: "Southeast",
         locationName: "Southeast",
@@ -55,7 +55,7 @@ var populateDB = function() {
         location: [-122.637577,45.521784]
       },
       {
-        _id: new BSON.ObjectID(6),
+        id: 6,
         business: "Wolf and Bears",
         truckName: "North Portland",
         locationName: "Mississippi",
@@ -63,7 +63,7 @@ var populateDB = function() {
         location: [-122.675811,45.551254]
       },
       {
-        _id: new BSON.ObjectID(7),
+        id: 7,
         business: "Aybla Grill",
         truckName: "1660 SE 3rd",
         locationName: "1660 SE 3rd",
@@ -71,7 +71,7 @@ var populateDB = function() {
         location:[-122.662807,45.511102]
       },
       {
-        _id: new BSON.ObjectID(8),
+        id: 8,
         business: "Aybla Grill",
         truckName: "SW 5th and Oak",
         locationName: "SW 5th and Oak",
@@ -79,7 +79,7 @@ var populateDB = function() {
         location: [-122.676051,45.521461]
       },
       {
-        _id: new BSON.ObjectID(9),
+        id: 9,
         "business": "Aybla Grill",
         "truckName": "SW 10th and Alder",
         "locationName": "SW 10th and Alder",
