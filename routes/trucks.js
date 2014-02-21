@@ -4,7 +4,7 @@ var Server = mongo.Server,
     Db = mongo.Db,
     BSON = mongo.BSONPure;
     
-var server = new Server('tracker:f00d4thouhgt@troup.mongohq.com',10033, {auto_reconnect:true});
+var server = new Server('troup.mongohq.com',10033, {auto_reconnect:true});
 var db = new Db('app22402441',server, {safe:false});
 
 /* SAMPLE DATA */
@@ -24,16 +24,26 @@ var populateDB = function() {
 };
 
 db.open(function(err,db){
+    
    if(!err){
        console.log("Connected to 'truckdb' database");
        db.collection('trucks',{strict:true}, function(err,collection){
           if(err){
               console.log("The 'trucks' collection doesn't exist. Creating it.");
-              populateDB();
+              db.authenticate('tracker','f00d4thought', function(err, res){
+               if(!err){
+                   console.log('Authenticated!');
+                   populateDB();
+               }else{
+                   console.log("Couldn't connect to Database.  Couldn't Authenticate. - "+err);
+               }
+           });
+              
           }
        });
    }else{
-       console.log("Couldn't connect to 'truckdb' - "+err);
+       
+       
    }
 });
 
