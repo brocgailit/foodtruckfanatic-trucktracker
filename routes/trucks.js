@@ -7,6 +7,8 @@ var Server = mongo.Server,
 var server = new Server('troup.mongohq.com',10033, {auto_reconnect:true});
 var db = new Db('app22402441',server, {safe:false});
 
+var cname = 'trucks'; //collection name
+
 /* SAMPLE DATA */
 
 var populateDB = function() {
@@ -93,7 +95,7 @@ var populateDB = function() {
               console.log('Error populating database - '+err);
           }else{
               console.log('Populated database.');
-              collection.ensureIndex({location:"2d"})
+              collection.ensureIndex({location:"2d"});
           }
        });
     });
@@ -129,8 +131,10 @@ db.open(function(err,db){
 
 exports.findAll = function(req,res) {
     db.collection('trucks', function(err, collection){
+        var results = {food:null};
         collection.find().toArray(function(err, items){
-            res.send(items);
+            results.food = items;
+            res.send(results);
             console.log('Found your trucks');
         });
     });
@@ -140,10 +144,12 @@ exports.findByLoc = function(req,res) {
     var loc = JSON.parse(req.params.loc);
     console.log(loc);
     db.collection('trucks', function(err, collection){
+        var results = {food:null};
         collection.find({ location :
                          { $near : loc ,
                            $maxDistance: 100000
                     } }).toArray(function(err, items){
+                        results.food = items;
             res.send(items);
             console.log('Found your trucks');
         });
