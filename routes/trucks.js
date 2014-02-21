@@ -131,10 +131,9 @@ db.open(function(err,db){
 
 exports.findAll = function(req,res) {
     db.collection('trucks', function(err, collection){
-        var results = {food:null};
+
         collection.find().toArray(function(err, items){
-            results.food = items;
-            res.send(results);
+            res.send(items);
             console.log('Found your trucks');
         });
     });
@@ -144,12 +143,11 @@ exports.findByLoc = function(req,res) {
     var loc = JSON.parse(req.params.loc);
     console.log(loc);
     db.collection('trucks', function(err, collection){
-        var results = {food:null};
+
         collection.find({ location :
                          { $near : loc ,
                            $maxDistance: 100000
                     } }).toArray(function(err, items){
-                        results.food = items;
             res.send(items);
             console.log('Found your trucks');
         });
