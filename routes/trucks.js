@@ -144,7 +144,7 @@ exports.findByLoc = function(req,res) {
     var loc = JSON.parse(req.params.loc);
     console.log(loc);
     db.collection('trucks', function(err, collection){
-
+        var results = {truck:null};
         collection.find({ location :
                          { $near : loc ,
                            $maxDistance: 100000
