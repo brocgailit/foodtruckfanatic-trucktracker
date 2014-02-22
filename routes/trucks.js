@@ -157,7 +157,7 @@ exports.findByLoc = function(req,res) {
 
     
     db.collection('trucks', function(err, collection){
-        collection.geoNear( loc[0],loc[1], {$maxDistance: 100000},function(err, items){
+        collection.geoNear( loc[0],loc[1], {$maxDistance: 100000,spherical:true,distanceMultiplier:3959},function(err, items){
             var truck = [];
             
             items = items.results; //strip out meta data
