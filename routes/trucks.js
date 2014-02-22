@@ -146,22 +146,48 @@ exports.findAll = function(req,res) {
 };
 
 exports.findByLoc = function(req,res) {
+    
+    var loc = [0,0];
+    
     if ( typeof req.query.loc !== 'undefined' && req.query.loc ){
-        var loc = JSON.parse(req.query.loc);
+        loc = JSON.parse(req.query.loc);
     }else{
-        var loc = JSON.parse(req.params.loc);
+        loc = JSON.parse(req.params.loc);
     }
-    console.log(loc);
+
+    
     db.collection('trucks', function(err, collection){
-        collection.find({ location :
-                         { $near : loc ,
-                           $maxDistance: 100000
-                    } }).toArray(function(err, items){
-                        results.truck = items;
+        collection.geoNear( loc[0],loc[1], {$maxDistance: 100000},function(err, items){
+            var truck = [];
+            
+            items = items.results; //strip out meta data
+            
+            items.forEach(function(item){
+                var t = item.obj;
+                t.distance = item.dis;
+                truck.push(t);
+            });
+            
+            results.truck = truck;
             res.send(results);
             console.log('Found your trucks');
         });
     });
+    
+    /*
+    db.collection('trucks', function(err, collection){
+        collection.find({ 
+            location : { 
+                $near : loc ,
+                $maxDistance: 100000
+            }
+        }).toArray(function(err, items){
+            results.truck = items;
+            res.send(results);
+            console.log('Found your trucks');
+        });
+    });
+    */
 };
 
 
