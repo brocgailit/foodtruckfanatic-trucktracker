@@ -125,13 +125,14 @@ db.open(function(err,db){
    }
 });
 
+var results = {truck:null};
+
 /*
  * GET trucks
  */
 
 exports.findAll = function(req,res) {
-    db.collection('trucks', function(err, collection){
-        var results = {truck:null};
+    db.collection('trucks', function(err, collection){     
         collection.find().toArray(function(err, items){
             results.truck = items;
             res.send(results);
@@ -144,12 +145,11 @@ exports.findByLoc = function(req,res) {
     var loc = JSON.parse(req.params.loc);
     console.log(loc);
     db.collection('trucks', function(err, collection){
-        var results = {truck:null};
         collection.find({ location :
                          { $near : loc ,
                            $maxDistance: 100000
                     } }).toArray(function(err, items){
-                        results.food = items;
+                        results.truck = items;
             res.send(items);
             console.log('Found your trucks');
         });
@@ -162,6 +162,7 @@ exports.findById = function(req,res) {
     console.log('Retrieving truck: ' + id);
     db.collection('trucks', function(err,collection){
         collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, item){
+            results.truck = item;
             res.send(item);
         });
     });
