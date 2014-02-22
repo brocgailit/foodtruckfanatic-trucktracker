@@ -150,7 +150,7 @@ exports.findByLoc = function(req,res) {
                            $maxDistance: 100000
                     } }).toArray(function(err, items){
                         results.truck = items;
-            res.send(items);
+            res.send(results);
             console.log('Found your trucks');
         });
     });
@@ -163,7 +163,7 @@ exports.findById = function(req,res) {
     db.collection('trucks', function(err,collection){
         collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, item){
             results.truck = item;
-            res.send(item);
+            res.send(results);
         });
     });
 };
