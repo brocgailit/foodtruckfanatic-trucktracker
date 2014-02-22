@@ -132,17 +132,25 @@ var results = {truck:null};
  */
 
 exports.findAll = function(req,res) {
-    db.collection('trucks', function(err, collection){     
-        collection.find().toArray(function(err, items){
-            results.truck = items;
-            res.send(results);
-            console.log('Found your trucks');
+    if ( typeof req.query.loc !== 'undefined' && req.query.loc ){
+        exports.findByLoc(req,res);
+    }else{
+        db.collection('trucks', function(err, collection){     
+            collection.find().toArray(function(err, items){
+                results.truck = items;
+                res.send(results);
+                console.log('Found your trucks');
+            });
         });
-    });
+    }
 };
 
 exports.findByLoc = function(req,res) {
-    var loc = JSON.parse(req.params.loc);
+    if ( typeof req.query.loc !== 'undefined' && req.query.loc ){
+        var loc = JSON.parse(req.query.loc);
+    }else{
+        var loc = JSON.parse(req.params.loc);
+    }
     console.log(loc);
     db.collection('trucks', function(err, collection){
         collection.find({ location :
