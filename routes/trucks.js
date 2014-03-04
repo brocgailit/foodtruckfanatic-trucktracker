@@ -137,8 +137,7 @@ exports.findAll = function(req,res) {
     }else{
         db.collection('trucks', function(err, collection){     
             collection.find().toArray(function(err, items){
-                results.truck = items;
-                res.send(results);
+                res.send(items);
                 console.log('Found your trucks');
             });
         });
@@ -168,8 +167,7 @@ exports.findByLoc = function(req,res) {
                 truck.push(t);
             });
             
-            results.truck = truck;
-            res.send(results);
+            res.send(truck);
             console.log('Found your trucks');
         });
     });
@@ -196,8 +194,7 @@ exports.findById = function(req,res) {
     console.log('Retrieving truck: ' + id);
     db.collection('trucks', function(err,collection){
         collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, item){
-            results.truck = item;
-            res.send(results);
+            res.send(item);
         });
     });
 };
