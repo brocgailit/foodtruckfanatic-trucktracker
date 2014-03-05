@@ -125,6 +125,29 @@ db.open(function(err,db){
    }
 });
 
+var sanitizeFavorites =  function(req){
+    var favorites = new Array();
+    if ( typeof req.query.favorites !== 'undefined' && req.query.favorites ){
+        if (req.query.favorites instanceof Array) {
+            favorites = req.query.favorites;
+         }else{
+             favorites.push(req.query.favorites);
+         }
+    }
+    return favorites;
+};
+
+var isFavorite = function(favorites, id){
+    var matchFound = false;
+    favorites.forEach(function(favorite){
+        if(id == favorite){
+            matchFound = true;
+            return;
+        }
+    });
+    return matchFound;
+};
+
 var results = {truck:null};
 
 /*
@@ -145,18 +168,10 @@ exports.findAll = function(req,res) {
 };
 
 exports.findByLoc = function(req,res) {
-    
-    var favorites = new Array();
 
     var loc = [0,0];
     
-    if ( typeof req.query.favorites !== 'undefined' && req.query.favorites ){
-        if (req.query.favorites instanceof Array) {
-            favorites = req.query.favorites;
-         }else{
-             favorites.push(req.query.favorites);
-         }
-    }
+    var favorites = sanitizeFavorites(req);
     
     if ( typeof req.query.loc !== 'undefined' && req.query.loc ){
         loc = JSON.parse(req.query.loc);
@@ -174,15 +189,7 @@ exports.findByLoc = function(req,res) {
             items.forEach(function(item){
                 var t = item.obj;
                 t.distance = item.dis;
-                t.favorite = false;
-                
-                favorites.forEach(function(favorite){
-                    if(t.id == favorite){
-                        console.log(t.id+":"+favorite);
-                        t.favorite = true;
-                        return;
-                    }
-                });
+                t.favorite = isFavorite(favorites,t.id);
                 
                 truck.push(t);
                 
@@ -192,29 +199,16 @@ exports.findByLoc = function(req,res) {
             console.log('Found your trucks');
         });
     });
-    
-    /*
-    db.collection('trucks', function(err, collection){
-        collection.find({ 
-            location : { 
-                $near : loc ,
-                $maxDistance: 100000
-            }
-        }).toArray(function(err, items){
-            results.truck = items;
-            res.send(results);
-            console.log('Found your trucks');
-        });
-    });
-    */
 };
 
 
 exports.findById = function(req,res) {
     var id = req.params.id;
+    var favorites = sanitizeFavorites(req);
     console.log('Retrieving truck: ' + id);
     db.collection('trucks', function(err,collection){
         collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, item){
+            item.favorite = isFavorite(favorites,item.id);
             res.send(item);
         });
     });
