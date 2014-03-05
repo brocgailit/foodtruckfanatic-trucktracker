@@ -146,6 +146,8 @@ exports.findAll = function(req,res) {
 
 exports.findByLoc = function(req,res) {
     
+    var favorites = req.query.favorites;
+    console.log(favorites);
     var loc = [0,0];
     
     if ( typeof req.query.loc !== 'undefined' && req.query.loc ){
@@ -164,7 +166,17 @@ exports.findByLoc = function(req,res) {
             items.forEach(function(item){
                 var t = item.obj;
                 t.distance = item.dis;
+                t.favorite = false;
+                favorites.forEach(function(favorite){
+                    if(t.id == favorite){
+                        console.log(t.id+":"+favorite);
+                        t.favorite = true;
+                        return;
+                    }
+                });
+                
                 truck.push(t);
+                
             });
             
             res.send(truck);
