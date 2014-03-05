@@ -167,6 +167,7 @@ exports.findByLoc = function(req,res) {
                 var t = item.obj;
                 t.distance = item.dis;
                 t.favorite = false;
+                
                 favorites.forEach(function(favorite){
                     if(t.id == favorite){
                         console.log(t.id+":"+favorite);
