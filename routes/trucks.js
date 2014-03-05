@@ -146,9 +146,13 @@ exports.findAll = function(req,res) {
 
 exports.findByLoc = function(req,res) {
     
-    var favorites = req.query.favorites;
-    console.log(favorites);
+    var favorites = new Array();
+
     var loc = [0,0];
+    
+    if ( typeof req.query.favorites !== 'undefined' && req.query.favorites ){
+         favorites = req.query.favorites;
+    }
     
     if ( typeof req.query.loc !== 'undefined' && req.query.loc ){
         loc = JSON.parse(req.query.loc);
