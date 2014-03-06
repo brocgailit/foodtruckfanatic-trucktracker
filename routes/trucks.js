@@ -20,7 +20,10 @@ var populateDB = function() {
         truckName: "PSU",
         locationName: "PSU",
         phone: "",
-        location: [-122.681134, 45.514413]
+        location: {
+            longitude:-122.681134, 
+            latitude: 45.514413
+            }
       },
       {
         id: 2,
@@ -28,7 +31,10 @@ var populateDB = function() {
         truckName: "Good Food Here",
         locationName: "Good Food Here",
         phone: "",
-        location: [-122.617904,45.516551]
+        location: {
+            longitude:-122.617904, 
+            latitude: 45.516551
+            }
       },
       {
         id: 3,
@@ -36,7 +42,10 @@ var populateDB = function() {
         truckName: "Alberta",
         locationName: "Alberta",
         phone: "5032068959",
-        location: [-122.65488,45.559212]
+        location: {
+            longitude:-122.65488, 
+            latitude: 45.559212
+            }
       },
       {
         id: 4,
@@ -44,7 +53,10 @@ var populateDB = function() {
         truckName: "Southeast",
         locationName: "Southeast",
         phone: "5032067018",
-        location: [-122.637577,45.521784]
+        location: {
+            longitude:-122.637577, 
+            latitude:45.521784 
+            }
       },
       {
         id: 5,
@@ -52,7 +64,10 @@ var populateDB = function() {
         truckName: "Southeast",
         locationName: "Southeast",
         phone: "5034532872",
-        location: [-122.637577,45.521784]
+        location: {
+            longitude:-122.637577, 
+            latitude: 45.521784
+            }
       },
       {
         id: 6,
@@ -60,7 +75,10 @@ var populateDB = function() {
         truckName: "North Portland",
         locationName: "Mississippi",
         phone: "5034535044",
-        location: [-122.675811,45.551254]
+        location: {
+            longitude:-122.675811, 
+            latitude: 45.551254
+            }
       },
       {
         id: 7,
@@ -68,7 +86,10 @@ var populateDB = function() {
         truckName: "1660 SE 3rd",
         locationName: "1660 SE 3rd",
         phone: "",
-        location:[-122.662807,45.511102]
+        location:{
+            longitude:-122.662807, 
+            latitude: 45.511102
+            }
       },
       {
         id: 8,
@@ -76,7 +97,10 @@ var populateDB = function() {
         truckName: "SW 5th and Oak",
         locationName: "SW 5th and Oak",
         phone: "",
-        location: [-122.676051,45.521461]
+        location: {
+            longitude:-122.676051, 
+            latitude: 45.521461
+            }
       },
       {
         id: 9,
@@ -84,7 +108,10 @@ var populateDB = function() {
         "truckName": "SW 10th and Alder",
         "locationName": "SW 10th and Alder",
         "phone": "",
-        location:[-122.681291,45.520563]
+        location:{
+            longitude:-122.681291, 
+            latitude: 45.520563
+            }
       }
     ];
         
