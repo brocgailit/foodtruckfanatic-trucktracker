@@ -143,7 +143,6 @@ db.open(function(err,db){
                    console.log("Couldn't connect to Database.  Couldn't Authenticate. - "+err);
                }
            });
-              
           }
        });
    }else{
