@@ -44,11 +44,6 @@ if ('development' === app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.all('/trucks/location', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next();
- });
 app.get('/trucks', truck.findAll);
 app.get('/trucks/location/:loc', truck.findByLoc);
 app.get('/trucks/:id', truck.findById);
