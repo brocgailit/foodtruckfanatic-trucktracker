@@ -102,8 +102,8 @@ var populateDB = function() {
         locationName: "Southeast",
         phone: "5032067018",
         location: {
-            longitude:-122.637577, 
-            latitude:45.521784 
+            longitude:-122.63765, 
+            latitude:45.521894 
             }
       },
       {
@@ -114,8 +114,8 @@ var populateDB = function() {
         locationName: "Southeast",
         phone: "5034532872",
         location: {
-            longitude:-122.637577, 
-            latitude: 45.521784
+            longitude:-122.637715, 
+            latitude: 45.521821
             }
       },
       {
@@ -296,12 +296,11 @@ exports.findById = function(req,res) {
 
 exports.findByBusinessId = function(req,res) {
     var business_id = req.params.business_id;
-    var loc = [-122.681134,45.514413];  
+    var loc = [0,0];  
     var favorites = sanitizeFavorites(req);
     
     if ( typeof req.query.loc !== 'undefined' && req.query.loc ){
         loc = JSON.parse(req.query.loc);
-        console.log(loc);
     }
 
     db.collection('trucks', function(err,collection){
@@ -321,7 +320,6 @@ exports.findByBusinessId = function(req,res) {
             });
             
             res.send(truck);
-            console.log('Found your trucks');
         });
 
     });
