@@ -301,6 +301,7 @@ exports.findByBusinessId = function(req,res) {
     
     if ( typeof req.query.loc !== 'undefined' && req.query.loc ){
         loc = JSON.parse(req.query.loc);
+        console.log(loc);
     }
 
     db.collection('trucks', function(err,collection){
