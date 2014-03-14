@@ -227,6 +227,16 @@ var isFavorite = function(favorites, id){
     return matchFound;
 };
 
+var isValidObjectID = function (str) {
+  // coerce to string so the function can be generically used to test both strings and native objectIds created by the driver
+  str = str + '';
+  var len = str.length, valid = false;
+  if (len == 12 || len == 24) {
+    valid = /^[0-9a-fA-F]+$/.test(str);
+  }
+  return valid;
+};
+
 var results = {truck:null};
 
 /*
@@ -284,25 +294,38 @@ exports.findByLoc = function(req,res) {
 
 exports.findById = function(req,res) {
     var id = req.params.id;
-    var favorites = sanitizeFavorites(req);
-    var loc = [0,0];  
     
-    console.log('Retrieving truck: ' + id);
-    db.collection('trucks', function(err,collection){
+    if(isValidObjectID(id)){
+        var favorites = sanitizeFavorites(req);
+        var loc = [0,0];  
         
-        collection.geoNear( loc[0],loc[1], {query:{'_id':new BSON.ObjectID(id)}, $maxDistance: 100000,spherical:true,distanceMultiplier:3959},function(err, items){
-            var truck = [];
-            console.log(items);
-            items = items.results; //strip out meta data
-            var t = items[0].obj;
-            t.distance = items[0].dis;
-            t.favorite = isFavorite(favorites,t.id);
+        if ( typeof req.query.loc !== 'undefined' && req.query.loc ){
+            loc = JSON.parse(req.query.loc);
+        }
+        
+        console.log('Retrieving truck: ' + id);
+        db.collection('trucks', function(err,collection){
             
+            collection.geoNear( loc[0],loc[1], {query:{'_id':new BSON.ObjectID(id)}, $maxDistance: 100000,spherical:true,distanceMultiplier:3959},function(err, items){
+                var truck = [];
+                console.log(items);
+                item = items.results; //strip out meta data
+                if(item.length > 0){
+                    var t = item[0].obj;
+                    t.distance = item[0].dis;
+                    t.favorite = isFavorite(favorites,t.id);
+                    res.send(t);
+                }else{
+                    res.send('No result found');
+                }
+                
+                
+            });
             
-            res.send(t);
         });
-        
-    });
+     }else{
+         res.send(id+' is not a valid ObjectID');
+     }
 };
 
 exports.findByBusinessId = function(req,res) {
