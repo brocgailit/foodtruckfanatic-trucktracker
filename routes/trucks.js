@@ -407,6 +407,19 @@ exports.findByBusinessId = function(req,res) {
     });
 };
 
+exports.findBusinessById = function(req,res){
+    console.log('finding business by id');
+    
+    var business_id = req.params.business_id;
+
+    db.collection('businesses', function(err,collection){
+        collection.findOne({'id':parseInt(business_id)}, function(err, item){
+             res.send(item);
+        });
+
+    });
+};
+
 
 /*
  * POST trucks
