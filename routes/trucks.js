@@ -289,10 +289,6 @@ exports.findById = function(req,res) {
     
     console.log('Retrieving truck: ' + id);
     db.collection('trucks', function(err,collection){
-        collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, item){
-            item.favorite = isFavorite(favorites,item.id);
-            res.send(item);
-        });
         
         collection.geoNear( loc[0],loc[1], {query:{'_id':new BSON.ObjectID(id)}, $maxDistance: 100000,spherical:true,distanceMultiplier:3959},function(err, items){
             var truck = [];
