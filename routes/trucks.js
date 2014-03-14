@@ -1,4 +1,5 @@
 var mongo = require('mongodb');
+var q = require('q');
 
 var Server = mongo.Server,
     Db = mongo.Db,
@@ -14,7 +15,7 @@ var cname = 'trucks'; //collection name
 var populateDB = function() {
     console.log('Populating database.');
     
-    var business = [
+    var businesses = [
         {
             id:2,
             name: "The Grilled Cheese Grill",
@@ -167,6 +168,18 @@ var populateDB = function() {
             }
       }
     ];
+    
+    db.collection('businesses', function(err,collection){
+       collection.remove();  //get rid of what's in there
+       collection.insert(businesses, {safe:true}, function(err,result){
+          if(err){
+              console.log('Error populating database - '+err);
+          }else{
+              console.log('Populated business database.');
+              collection.ensureIndex({location:"2d"});
+          }
+       });
+    });
         
     db.collection('trucks', function(err,collection){
        collection.remove();  //get rid of what's in there
@@ -174,7 +187,7 @@ var populateDB = function() {
           if(err){
               console.log('Error populating database - '+err);
           }else{
-              console.log('Populated database.');
+              console.log('Populated truck database.');
               collection.ensureIndex({location:"2d"});
           }
        });
@@ -237,6 +250,27 @@ var isValidObjectID = function (str) {
   return valid;
 };
 
+var findBusinessById = function(business_id) {
+    
+    var deferred = q.defer();
+    var resolve = deferred.resolve;
+
+    db.collection('businesses', function(err,collection){
+        
+        collection.findOne({id:business_id}, function(err, item){
+            if(err){
+                throw new Error(err);
+            }else{
+                resolve(item);
+            }
+        });
+
+    });
+    
+    return deferred.promise;
+    
+};
+
 var results = {truck:null};
 
 /*
@@ -279,9 +313,10 @@ exports.findByLoc = function(req,res) {
                 var t = item.obj;
                 t.distance = item.dis;
                 t.favorite = isFavorite(favorites,t.id);
-                
-                truck.push(t);
-                
+                findBusinessById(t.businessId).then( function(business){
+                        t.business = business;
+                        truck.push(t);
+                    });
             });
             
             res.send(truck);
@@ -314,7 +349,11 @@ exports.findById = function(req,res) {
                     var t = item[0].obj;
                     t.distance = item[0].dis;
                     t.favorite = isFavorite(favorites,t.id);
-                    res.send(t);
+                    findBusinessById(t.businessId).then( function(business){
+                        t.business = business;
+                        res.send(t);
+                    });
+                    
                 }else{
                     res.send('No result found');
                 }
@@ -348,7 +387,7 @@ exports.findByBusinessId = function(req,res) {
                 var t = item.obj;
                 t.distance = item.dis;
                 t.favorite = isFavorite(favorites,t.id);
-                
+                t.business = findBusinessById(t.businessId);
                 truck.push(t);
             });
             
@@ -357,6 +396,7 @@ exports.findByBusinessId = function(req,res) {
 
     });
 };
+
 
 /*
  * POST trucks
