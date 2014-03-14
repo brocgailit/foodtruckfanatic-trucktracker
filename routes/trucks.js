@@ -334,6 +334,7 @@ exports.findByLoc = function(req,res) {
                     if(count >= items.length){
                         emitter.emit('businessesReady', truck);
                     }
+                    
                 });
 
             });
