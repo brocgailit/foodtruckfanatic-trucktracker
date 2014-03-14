@@ -1,5 +1,7 @@
 var mongo = require('mongodb');
 var q = require('q');
+var events = require('events');
+var emitter = new events.EventEmitter();
 
 var Server = mongo.Server,
     Db = mongo.Db,
@@ -300,25 +302,40 @@ exports.findByLoc = function(req,res) {
     }else{
         loc = JSON.parse(req.params.loc);
     }
-
     
     db.collection('trucks', function(err, collection){
         
         collection.geoNear( loc[0],loc[1], {$maxDistance: 100000,spherical:true,distanceMultiplier:3959},function(err, items){
             var truck = [];
-            console.log(items);
+            var count = 0;
+            
             items = items.results; //strip out meta data
             
-            items.forEach(function(item){
-                var t = item.obj;
-                t.distance = item.dis;
-                t.favorite = isFavorite(favorites,t.id);
-                truck.push(t);
+            items.forEach(function(item, index){
                 
+
+                findBusinessById(item.obj.businessId).then( function(business){
+                    count++;
+                    var t = item.obj;
+                    
+                    t.distance = item.dis;
+                    t.favorite = isFavorite(favorites,t.id);
+                    t.business = business;
+                    
+                    truck.push(t);
+
+                    if(count >= items.length){
+                        emitter.emit('businessesReady', truck);
+                    }
+                });
+
             });
             
-            res.send(truck);
-            console.log('Found your trucks');
+            emitter.on('businessesReady', function(result){
+                res.send(result);
+                console.log('Found your trucks');
+            });
+            
         });
         
     });
