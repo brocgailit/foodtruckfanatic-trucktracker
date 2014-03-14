@@ -304,8 +304,7 @@ exports.findByLoc = function(req,res) {
     }
     
     emitter.on('businessesReady', function(result){
-                res.send(result);
-                console.log('Found your trucks by location');
+                
             });
     
     db.collection('trucks', function(err, collection){
@@ -317,29 +316,21 @@ exports.findByLoc = function(req,res) {
             items = items.results; //strip out meta data
             
             items.forEach(function(item, index){
+                    
+                var t = item.obj;
                 
-
-                findBusinessById(item.obj.businessId).then( function(business){
-                    
-                    var t = item.obj;
-                    
-                    count++;
-                    
-                    t.distance = item.dis;
-                    t.favorite = isFavorite(favorites,t.id);
-                    t.business = business;
-                    
-                    truck.push(t);
-
-                    if(count >= items.length){
-                        emitter.emit('businessesReady', truck);
-                    }
-                    
-                });
+                count++;
+                
+                t.distance = item.dis;
+                t.favorite = isFavorite(favorites,t.id);
+                t.business.name = business;
+                
+                truck.push(t);
 
             });
             
-            
+            res.send(result);
+            console.log('Found your trucks by location');
             
         });
         
