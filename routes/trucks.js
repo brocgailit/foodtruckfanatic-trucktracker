@@ -323,13 +323,13 @@ exports.findByLoc = function(req,res) {
                 
                 t.distance = item.dis;
                 t.favorite = isFavorite(favorites,t.id);
-                t.business.name = business;
+                t.business = {"name" : t.business};
                 
                 truck.push(t);
 
             });
             
-            res.send(result);
+            res.send(truck);
             console.log('Found your trucks by location');
             
         });
