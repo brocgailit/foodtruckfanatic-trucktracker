@@ -315,8 +315,10 @@ exports.findByLoc = function(req,res) {
                 
 
                 findBusinessById(item.obj.businessId).then( function(business){
-                    count++;
+                    
                     var t = item.obj;
+                    
+                    count++;
                     
                     t.distance = item.dis;
                     t.favorite = isFavorite(favorites,t.id);
