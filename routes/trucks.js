@@ -316,7 +316,6 @@ exports.findByBusinessId = function(req,res) {
                 t.favorite = isFavorite(favorites,t.id);
                 
                 truck.push(t);
-                
             });
             
             res.send(truck);
