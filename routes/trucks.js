@@ -285,12 +285,27 @@ exports.findByLoc = function(req,res) {
 exports.findById = function(req,res) {
     var id = req.params.id;
     var favorites = sanitizeFavorites(req);
+    var loc = [0,0];  
+    
     console.log('Retrieving truck: ' + id);
     db.collection('trucks', function(err,collection){
         collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, item){
             item.favorite = isFavorite(favorites,item.id);
             res.send(item);
         });
+        
+        collection.geoNear( loc[0],loc[1], {query:{'_id':new BSON.ObjectID(id)}, $maxDistance: 100000,spherical:true,distanceMultiplier:3959},function(err, items){
+            var truck = [];
+            console.log(items);
+            items = items.results; //strip out meta data
+            var t = items[0].obj;
+            t.distance = items[0].dis;
+            t.favorite = isFavorite(favorites,t.id);
+            
+            
+            res.send(t);
+        });
+        
     });
 };
 
