@@ -286,7 +286,7 @@ exports.findAll = function(req,res) {
         db.collection('trucks', function(err, collection){     
             collection.find().toArray(function(err, items){
                 res.send(items);
-                console.log('Found your trucks');
+                console.log('Found all of your trucks');
             });
         });
     }
@@ -302,6 +302,11 @@ exports.findByLoc = function(req,res) {
     }else{
         loc = JSON.parse(req.params.loc);
     }
+    
+    emitter.on('businessesReady', function(result){
+                res.send(result);
+                console.log('Found your trucks by location');
+            });
     
     db.collection('trucks', function(err, collection){
         
@@ -333,10 +338,7 @@ exports.findByLoc = function(req,res) {
 
             });
             
-            emitter.on('businessesReady', function(result){
-                res.send(result);
-                console.log('Found your trucks');
-            });
+            
             
         });
         
