@@ -295,6 +295,7 @@ exports.findAll = function(req,res) {
 exports.findByLoc = function(req,res) {
 
     var loc = [0,0];  
+    var qlimit = 100;
     var favorites = sanitizeFavorites(req);
     
     if ( typeof req.query.loc !== 'undefined' && req.query.loc ){
@@ -303,13 +304,13 @@ exports.findByLoc = function(req,res) {
         loc = JSON.parse(req.params.loc);
     }
     
-    emitter.on('businessesReady', function(result){
-                
-            });
+    if ( typeof req.query.limit !== 'undefined' && req.query.limit ){
+        qlimit = parseInt(req.query.limit); 
+    }
     
     db.collection('trucks', function(err, collection){
         
-        collection.geoNear( loc[0],loc[1], {$maxDistance: 100000,spherical:true,distanceMultiplier:3959},function(err, items){
+        collection.geoNear( loc[0],loc[1], {num : qlimit, $maxDistance: 0.5,spherical:true,distanceMultiplier:3959},function(err, items){
             var truck = [];
             var count = 0;
             
