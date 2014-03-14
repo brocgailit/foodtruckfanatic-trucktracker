@@ -313,10 +313,8 @@ exports.findByLoc = function(req,res) {
                 var t = item.obj;
                 t.distance = item.dis;
                 t.favorite = isFavorite(favorites,t.id);
-                findBusinessById(t.businessId).then( function(business){
-                        t.business = business;
-                        truck.push(t);
-                    });
+                truck.push(t);
+                
             });
             
             res.send(truck);
@@ -387,7 +385,6 @@ exports.findByBusinessId = function(req,res) {
                 var t = item.obj;
                 t.distance = item.dis;
                 t.favorite = isFavorite(favorites,t.id);
-                t.business = findBusinessById(t.businessId);
                 truck.push(t);
             });
             
