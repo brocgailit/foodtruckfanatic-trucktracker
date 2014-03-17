@@ -408,6 +408,25 @@ exports.findByBusinessId = function(req,res) {
     });
 };
 
+exports.findAllBusinesses = function(req,res) {
+    
+        var cuisine, query;
+        
+        query = null;
+        
+        if ( typeof req.query.cuisine !== 'undefined' && req.query.cuisine ){
+             query = {'cuisine':{ $in: req.query.cuisine}};
+        }
+
+        db.collection('businesses', function(err, collection){     
+            collection.find(query).toArray(function(err, items){
+                res.send(items);
+                console.log('Found all of your businesses');
+            });
+        });
+
+};
+
 exports.findBusinessById = function(req,res){
     console.log('finding business by id');
     
@@ -420,6 +439,19 @@ exports.findBusinessById = function(req,res){
 
     });
 };
+
+exports.findAllCuisines = function(req,res){
+    console.log('finding cuisines');
+
+    db.collection('businesses', function(err,collection){
+        collection.distinct('cuisine', function(err, item){
+            item.sort();
+            res.send(item);
+        });
+
+    });
+};
+
 
 
 /*

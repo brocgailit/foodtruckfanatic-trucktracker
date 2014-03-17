@@ -48,6 +48,8 @@ if ('development' === app.get('env')) {
 app.get('/trucks', truck.findAll);
 app.get('/trucks/location/:loc', truck.findByLoc);
 app.get('/trucks/:id', truck.findById);
+app.get('/cuisines', truck.findAllCuisines);
+app.get('/business', truck.findAllBusinesses);
 app.get('/business/:business_id', truck.findBusinessById);
 app.get('/business/:business_id/trucks', truck.findByBusinessId);
 app.post('/trucks', truck.addTruck);
