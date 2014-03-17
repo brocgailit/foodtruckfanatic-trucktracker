@@ -43,7 +43,7 @@ var populateDB = function() {
                 email: "info@ayblagrill.com",
                 website: "www.ayblagrill.com"
             },
-            cuisine: ["Mediterranean"]
+            cuisine: ["Mediterranean", "Falafel"]
         },{
             id:3,
             name: "Wolf and Bears",
@@ -415,11 +415,14 @@ exports.findAllBusinesses = function(req,res) {
         query = null;
         
         if ( typeof req.query.cuisine !== 'undefined' && req.query.cuisine ){
+            
             cuisine = req.query.cuisine;
+            
             if( !Array.isArray(cuisine) ){
                 cuisine = [cuisine];
             }
-             query = {'cuisine':{ $in: cuisine}};
+            
+            query = {'cuisine':{ $in: cuisine}};
         }
 
         db.collection('businesses', function(err, collection){     
