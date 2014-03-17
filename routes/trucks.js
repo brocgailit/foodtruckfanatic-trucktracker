@@ -415,7 +415,11 @@ exports.findAllBusinesses = function(req,res) {
         query = null;
         
         if ( typeof req.query.cuisine !== 'undefined' && req.query.cuisine ){
-             query = {'cuisine':{ $in: req.query.cuisine}};
+            cuisine = req.query.cuisine;
+            if( !Array.isArray(cuisine) ){
+                cuisine = [cuisine];
+            }
+             query = {'cuisine':{ $in: cuisine}};
         }
 
         db.collection('businesses', function(err, collection){     
