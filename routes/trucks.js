@@ -168,6 +168,30 @@ var populateDB = function() {
             longitude:-122.681291, 
             latitude: 45.520563
             }
+      },
+      {
+        id: 10,
+        businessId: 3,
+        "business": "Wolf and Bears",
+        "truckName": "Downtown",
+        "locationName": "SW 10th and Alder",
+        "phone": "",
+        location:{
+            longitude:-122.681384, 
+            latitude: 45.521119
+            }
+      },
+      {
+        id: 11,
+        businessId: 2,
+        "business": "Grilled Cheese Grill",
+        "truckName": "Downtown",
+        "locationName": "SW 10th and Alder",
+        "phone": "",
+        location:{
+            longitude:-122.681422, 
+            latitude: 45.521043
+            }
       }
     ];
     
