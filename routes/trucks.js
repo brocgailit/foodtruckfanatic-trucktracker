@@ -30,6 +30,23 @@ var populateDB = function() {
                 email: "matt@grilledcheesegrill.com",
                 website: "www.grilledcheesegrill.com"
             },
+            trucks: [
+                {
+                    id: 1,
+                    name: "Southeast",
+                    phone: "5032067018"
+                },
+                {
+                    id: 2,
+                    name: "Alberta",
+                    phone: "5032068959"
+                },
+                {
+                    id: 3,
+                    name: "Downtown",
+                    phone: ""
+                }
+            ],
             cuisine: ["American", "Grilled Cheese", "Sandwiches"]
         },{
             id:1,
@@ -43,6 +60,33 @@ var populateDB = function() {
                 email: "info@ayblagrill.com",
                 website: "www.ayblagrill.com"
             },
+            trucks: [
+                {
+                    id: 1,
+                    name: "PSU",
+                    phone: ""
+                },
+                {
+                    id: 2,
+                    name: "Good Food Here",
+                    phone: ""
+                },
+                {
+                    id: 3,
+                    name: "1660 SE 3rd",
+                    phone: ""
+                },
+                {
+                    id: 4,
+                    name: "SW 5th and Oak",
+                    phone: ""
+                },
+                {
+                    id: 5,
+                    name: "SW 10th and Alder",
+                    phone: ""
+                }
+            ],
             cuisine: ["Mediterranean", "Falafel"]
         },{
             id:3,
@@ -56,8 +100,236 @@ var populateDB = function() {
                 email: "",
                 website: ""
             },
+            trucks: [
+                {
+                    id: 1,
+                    name: "Southeast",
+                    phone: "5034532872"
+                },
+                {
+                    id: 2,
+                    name: "Mississippi",
+                    phone: "5034535044"
+                },
+                {
+                    id: 3,
+                    name: "Downtown",
+                    phone: "5038100671"
+                }
+            ],
             cuisine: ["Vegetarian", "Middle Eastern", "Falafel"]
         }
+    ];
+    
+    var locations = [
+      {
+        id: 1,
+        businessId: 1,
+        truckId: 1,
+        schedule: [{
+            date: '2014-03-17',
+            start: '08:00:00',
+            end: '21:00:00',
+            repeat: {
+                type: 'daily',
+                end: '2014-03-21'
+            }
+        }],
+        description: "PSU",
+        location: {
+            longitude:-122.681134, 
+            latitude: 45.514413
+            }
+      },
+      {
+        id: 2,
+        businessId: 1,
+        truckId: 2,
+        schedule: [{
+            date: '2014-03-17',
+            start: '08:00:00',
+            end: '21:00:00',
+            repeat: {
+                type: 'daily',
+                end: '2014-03-21'
+            }
+        }],
+        description: "Good Food Here Belmont",
+        location: {
+            longitude:-122.617904, 
+            latitude: 45.516551
+            }
+      },
+      {
+        id: 3,
+        businessId: 2,
+        truckId: 2,
+        schedule: [{
+            date: '2014-03-17',
+            start: '08:00:00',
+            end: '21:00:00',
+            repeat: {
+                type: 'daily',
+                end: '2014-03-21'
+            }
+        }],
+        description: "1027 NE Alberta Street",
+        location: {
+            longitude: -122.65488,
+            latitude: 45.559212
+            }
+      },
+      {
+        id: 4,
+        businessId: 2,
+        truckId: 1,
+        schedule: [{
+            date: '2014-03-17',
+            start: '08:00:00',
+            end: '21:00:00',
+            repeat: {
+                type: 'daily',
+                end: '2014-03-21'
+            }
+        }],
+        description: "SE 28th Ave (Between Ash and Ankeny)",
+        location: {
+            longitude:-122.63765, 
+            latitude:45.521894
+            }
+      },
+      {
+        id: 5,
+        businessId: 3,
+        truckId: 1,
+        schedule: [{
+            date: '2014-03-17',
+            start: '08:00:00',
+            end: '21:00:00',
+            repeat: {
+                type: 'daily',
+                end: '2014-03-21'
+            }
+        }],
+        description: "SE 28th Ave (Between Ash and Ankeny)",
+        location: {
+            longitude:-122.637715, 
+            latitude: 45.521821
+        }
+      },
+      {
+        id: 6,
+        businessId: 3,
+        truckId: 2,
+        schedule: [{
+            date: '2014-03-17',
+            start: '08:00:00',
+            end: '21:00:00',
+            repeat: {
+                type: 'daily',
+                end: '2014-03-21'
+            }
+        }],
+        description: "Mississippi Avenue",
+        location: {
+            longitude:-122.675811, 
+            latitude: 45.551254
+            }
+      },
+      {
+        id: 7,
+        businessId: 1,
+        truckId: 3,
+        schedule: [{
+            date: '2014-03-17',
+            start: '08:00:00',
+            end: '21:00:00',
+            repeat: {
+                type: 'daily',
+                end: '2014-03-21'
+            }
+        }],
+        description: "1660 SE 3rd",
+        location:{
+            longitude:-122.662807, 
+            latitude: 45.511102
+            }
+      },
+      {
+        id: 8,
+        businessId: 1,
+        truckId: 4,
+        schedule: [{
+            date: '2014-03-17',
+            start: '08:00:00',
+            end: '21:00:00',
+            repeat: {
+                type: 'daily',
+                end: '2014-03-21'
+            }
+        }],
+        description: "SW 5th and Oak",
+        location: {
+            longitude:-122.676051, 
+            latitude: 45.521461
+            }
+      },
+      {
+        id: 9,
+        businessId: 1,
+        truckId: 5,
+        schedule: [{
+            date: '2014-03-17',
+            start: '08:00:00',
+            end: '21:00:00',
+            repeat: {
+                type: 'daily',
+                end: '2014-03-21'
+            }
+        }],
+        description: "SW 10th and Alder",
+        location:{
+            longitude:-122.681291, 
+            latitude: 45.520563
+            }
+      },
+      {
+        id: 10,
+        businessId: 3,
+        truckId: 3,
+        schedule: [{
+            date: '2014-03-17',
+            start: '08:00:00',
+            end: '21:00:00',
+            repeat: {
+                type: 'daily',
+                end: '2014-03-21'
+            }
+        }],
+        location:{
+            longitude:-122.681384, 
+            latitude: 45.521119
+            }
+      },
+      {
+        id: 11,
+        businessId: 2,
+        truckId: 3,
+        schedule: [{
+            date: '2014-03-17',
+            start: '08:00:00',
+            end: '21:00:00',
+            repeat: {
+                type: 'daily',
+                end: '2014-03-21'
+            }
+        }],
+        description: "SW 10th and Alder",
+        location:{
+            longitude:-122.681422, 
+            latitude: 45.521043
+            }
+      }
     ];
     
     var trucks = [
@@ -93,7 +365,7 @@ var populateDB = function() {
         locationName: "Alberta",
         phone: "5032068959",
         location: {
-            longitude:-122.65488, 
+            longitude: -122.65488,
             latitude: 45.559212
             }
       },
@@ -116,10 +388,14 @@ var populateDB = function() {
         truckName: "Southeast",
         locationName: "Southeast",
         phone: "5034532872",
+        date: '2014-03-17',
+        start: '08:00:00',
+        end: '22:00:00',
+        repeat: 'daily',
         location: {
             longitude:-122.637715, 
             latitude: 45.521821
-            }
+        }
       },
       {
         id: 6,
@@ -202,7 +478,6 @@ var populateDB = function() {
               console.log('Error populating database - '+err);
           }else{
               console.log('Populated business database.');
-              collection.ensureIndex({location:"2d"});
           }
        });
     });
@@ -214,6 +489,18 @@ var populateDB = function() {
               console.log('Error populating database - '+err);
           }else{
               console.log('Populated truck database.');
+              collection.ensureIndex({location:"2d"});
+          }
+       });
+    });
+    
+    db.collection('locations', function(err,collection){
+       collection.remove();  //get rid of what's in there
+       collection.insert(locations, {safe:true}, function(err,result){
+          if(err){
+              console.log('Error populating database - '+err);
+          }else{
+              console.log('Populated locations database.');
               collection.ensureIndex({location:"2d"});
           }
        });
@@ -307,7 +594,7 @@ exports.findAll = function(req,res) {
     if ( typeof req.query.loc !== 'undefined' && req.query.loc ){
         exports.findByLoc(req,res);
     }else{
-        db.collection('trucks', function(err, collection){     
+        db.collection('locations', function(err, collection){     
             collection.find().toArray(function(err, items){
                 res.send(items);
                 console.log('Found all of your trucks');
@@ -332,11 +619,10 @@ exports.findByLoc = function(req,res) {
         qlimit = parseInt(req.query.limit); 
     }
     
-    db.collection('trucks', function(err, collection){
+    db.collection('locations', function(err, collection){
         
         collection.geoNear( loc[0],loc[1], {num : qlimit, $maxDistance: 0.5,spherical:true,distanceMultiplier:3959},function(err, items){
             var truck = [];
-            var count = 0;
             
             items = items.results; //strip out meta data
             
@@ -344,11 +630,8 @@ exports.findByLoc = function(req,res) {
                     
                 var t = item.obj;
                 
-                count++;
-                
                 t.distance = item.dis;
-                t.favorite = isFavorite(favorites,t.id);
-                t.business = {"name" : t.business};
+                t.favorite = isFavorite(favorites,t.truckId);
                 
                 truck.push(t);
 
@@ -375,7 +658,7 @@ exports.findById = function(req,res) {
         }
         
         console.log('Retrieving truck: ' + id);
-        db.collection('trucks', function(err,collection){
+        db.collection('locations', function(err,collection){
             
             collection.geoNear( loc[0],loc[1], {query:{'_id':new BSON.ObjectID(id)}, $maxDistance: 100000,spherical:true,distanceMultiplier:3959},function(err, items){
                 var truck = [];
@@ -384,12 +667,8 @@ exports.findById = function(req,res) {
                 if(item.length > 0){
                     var t = item[0].obj;
                     t.distance = item[0].dis;
-                    t.favorite = isFavorite(favorites,t.id);
-                    findBusinessById(t.businessId).then( function(business){
-                        t.business = business;
-                        res.send(t);
-                    });
-                    
+                    t.favorite = isFavorite(favorites,t.truckId);
+                    res.send(t);
                 }else{
                     res.send('No result found');
                 }
