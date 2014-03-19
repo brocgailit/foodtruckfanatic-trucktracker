@@ -306,6 +306,7 @@ var populateDB = function() {
                 end: '2014-03-21'
             }
         }],
+        description:"SW 10th and Alder",
         location:{
             longitude:-122.681384, 
             latitude: 45.521119
