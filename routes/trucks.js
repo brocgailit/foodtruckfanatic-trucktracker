@@ -621,7 +621,7 @@ exports.findByLoc = function(req,res) {
                 var t = item.obj;
                 
                 t.distance = item.dis;
-                t.favorite = isFavorite(favorites,t.truckId);
+                t.favorite = isFavorite(favorites,t.id);
                 
                 truck.push(t);
 
@@ -657,7 +657,7 @@ exports.findById = function(req,res) {
                 if(item.length > 0){
                     var t = item[0].obj;
                     t.distance = item[0].dis;
-                    t.favorite = isFavorite(favorites,t.truckId);
+                    t.favorite = isFavorite(favorites,t.id);
                     res.send(t);
                 }else{
                     res.send('No result found');
