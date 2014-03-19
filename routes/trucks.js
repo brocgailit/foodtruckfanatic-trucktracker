@@ -181,8 +181,8 @@ var populateDB = function() {
         businessId: 2,
         truckId: 1,
         schedule: [{
-            start: '2014-03-1708:00:00',
-            end: '2014-03-1721:00:00',
+            start: '2014-03-17 08:00:00',
+            end: '2014-03-17 21:00:00',
             repeat: {
                 type: 'daily',
                 end: '2014-03-21'
