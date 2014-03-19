@@ -692,7 +692,7 @@ exports.findByBusinessId = function(req,res) {
         loc = JSON.parse(req.query.loc);
     }
 
-    db.collection('trucks', function(err,collection){
+    db.collection('locations', function(err,collection){
         
         collection.geoNear( loc[0],loc[1], {query:{'businessId':parseInt(business_id)}, $maxDistance: 100000,spherical:true,distanceMultiplier:3959},function(err, items){
             var truck = [];
