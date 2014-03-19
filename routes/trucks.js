@@ -127,9 +127,8 @@ var populateDB = function() {
         businessId: 1,
         truckId: 1,
         schedule: [{
-            date: '2014-03-17',
-            start: '08:00:00',
-            end: '21:00:00',
+            start: '2014-03-17 08:00:00',
+            end: '2014-03-17 21:00:00',
             repeat: {
                 type: 'daily',
                 end: '2014-03-21'
@@ -146,9 +145,8 @@ var populateDB = function() {
         businessId: 1,
         truckId: 2,
         schedule: [{
-            date: '2014-03-17',
-            start: '08:00:00',
-            end: '21:00:00',
+            start: '2014-03-17 08:00:00',
+            end: '2014-03-17 21:00:00',
             repeat: {
                 type: 'daily',
                 end: '2014-03-21'
@@ -165,9 +163,8 @@ var populateDB = function() {
         businessId: 2,
         truckId: 2,
         schedule: [{
-            date: '2014-03-17',
-            start: '08:00:00',
-            end: '21:00:00',
+            start: '2014-03-17 08:00:00',
+            end: '2014-03-17 21:00:00',
             repeat: {
                 type: 'daily',
                 end: '2014-03-21'
@@ -184,9 +181,8 @@ var populateDB = function() {
         businessId: 2,
         truckId: 1,
         schedule: [{
-            date: '2014-03-17',
-            start: '08:00:00',
-            end: '21:00:00',
+            start: '2014-03-1708:00:00',
+            end: '2014-03-1721:00:00',
             repeat: {
                 type: 'daily',
                 end: '2014-03-21'
@@ -203,9 +199,8 @@ var populateDB = function() {
         businessId: 3,
         truckId: 1,
         schedule: [{
-            date: '2014-03-17',
-            start: '08:00:00',
-            end: '21:00:00',
+            start: '2014-03-17 08:00:00',
+            end: '2014-03-17 21:00:00',
             repeat: {
                 type: 'daily',
                 end: '2014-03-21'
@@ -222,9 +217,8 @@ var populateDB = function() {
         businessId: 3,
         truckId: 2,
         schedule: [{
-            date: '2014-03-17',
-            start: '08:00:00',
-            end: '21:00:00',
+            start: '2014-03-17 08:00:00',
+            end: '2014-03-17 21:00:00',
             repeat: {
                 type: 'daily',
                 end: '2014-03-21'
@@ -241,9 +235,8 @@ var populateDB = function() {
         businessId: 1,
         truckId: 3,
         schedule: [{
-            date: '2014-03-17',
-            start: '08:00:00',
-            end: '21:00:00',
+            start: '2014-03-17 08:00:00',
+            end: '2014-03-17 21:00:00',
             repeat: {
                 type: 'daily',
                 end: '2014-03-21'
@@ -260,9 +253,8 @@ var populateDB = function() {
         businessId: 1,
         truckId: 4,
         schedule: [{
-            date: '2014-03-17',
-            start: '08:00:00',
-            end: '21:00:00',
+            start: '2014-03-17 08:00:00',
+            end: '2014-03-17 21:00:00',
             repeat: {
                 type: 'daily',
                 end: '2014-03-21'
@@ -279,9 +271,8 @@ var populateDB = function() {
         businessId: 1,
         truckId: 5,
         schedule: [{
-            date: '2014-03-17',
-            start: '08:00:00',
-            end: '21:00:00',
+            start: '2014-03-17 08:00:00',
+            end: '2014-03-17 21:00:00',
             repeat: {
                 type: 'daily',
                 end: '2014-03-21'
@@ -298,9 +289,8 @@ var populateDB = function() {
         businessId: 3,
         truckId: 3,
         schedule: [{
-            date: '2014-03-17',
-            start: '08:00:00',
-            end: '21:00:00',
+            start: '2014-03-17 08:00:00',
+            end: '2014-03-17 21:00:00',
             repeat: {
                 type: 'daily',
                 end: '2014-03-21'
@@ -317,9 +307,8 @@ var populateDB = function() {
         businessId: 2,
         truckId: 3,
         schedule: [{
-            date: '2014-03-17',
-            start: '08:00:00',
-            end: '21:00:00',
+            start: '2014-03-17 08:00:00',
+            end: '2014-03-17 21:00:00',
             repeat: {
                 type: 'daily',
                 end: '2014-03-21'
