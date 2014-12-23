@@ -4,11 +4,15 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node server.js"
+    "start": "node app.js"
   },
   "dependencies": {
     "express": "~3.4.8",
     "jade": "~1.1.5",
     "mongodb": "~1.3.23"
+      "morgan": "latest",
+      "method-override": "latest",
+      "body-parser": "latest",
+      "errorhandler": "latest"
   }
 }
