@@ -14,7 +14,7 @@ var app = module.exports = exports.app = express();
 app.locals.siteName = "TruckTrackerAPI";
 
 // Connect to database
-var db = require('./config/db');
+require('./config/db');
 app.use(express.static(__dirname + '/public'));
 
 
@@ -64,6 +64,7 @@ app.use(bodyParser());
 // Bootstrap routes/api
 var routesPath = path.join(__dirname, 'routes');
 fs.readdirSync(routesPath).forEach(function(file) {
+    console.log('adding route: '+file);
   require(routesPath + '/' + file)(app);
 });
 
