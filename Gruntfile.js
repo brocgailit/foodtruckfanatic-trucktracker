@@ -69,5 +69,7 @@ module.exports = function(grunt) {
   });
   grunt.registerTask('default', [ 'server' ]);
   grunt.registerTask('dist', [ 'server:prod' ]);
+  grunt.registerTask('heroku:production', 'clean less mincss uglify');
+  grunt.registerTask('heroku:development', 'clean less mincss');
 
 };
