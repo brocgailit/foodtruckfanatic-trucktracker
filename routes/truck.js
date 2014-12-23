@@ -6,10 +6,12 @@ module.exports = function(app) {
 
   // ALL
   api.trucks = function (req, res) {
+      console.log('Getting trucks ...');
     Truck.find(function(err, trucks) {
       if (err) {
         res.json(500, err);
-      } else {    
+      } else {
+          console.log('Found trucks.');
         res.json({trucks: trucks});
       }
     });
@@ -20,9 +22,10 @@ module.exports = function(app) {
     var id = req.params.id;
     Truck.findOne({ '_id': id }, function(err, truck) {
       if (err) {
-        res.json(404, err);
+        //res.json(404, err);
+        res.status(404).json(err)
       } else {
-        res.json({truck: truck});
+        res.status(200).json({truck: truck});
       }
     });
   };
@@ -86,7 +89,6 @@ module.exports = function(app) {
         } else {
          return res.json(500, err);
         }
-        return res.json(truck);
       });
     });
 
