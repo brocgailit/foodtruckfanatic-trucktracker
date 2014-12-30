@@ -2,6 +2,7 @@
 
 // Module dependencies.
 var express = require('express'),
+    jwt = require('express-jwt'),
     path = require('path'),
     fs = require('fs'),
     methodOverride = require('method-override'),
@@ -12,6 +13,11 @@ var express = require('express'),
 var app = module.exports = exports.app = express();
 
 app.locals.siteName = "TruckTrackerAPI";
+
+var jwtCheck = jwt({
+    secret: new Buffer('oCuoYmRgyxJVNmQVnloiUtTVZQMjNppWFrpfAiludwmChwkKt0e4qcHgqj83xvg-', 'base64'),
+    audience: 'VwMwgGQiLDpZRg3FanHd4Mqq12kPvDsR'
+});
 
 // Connect to database
 require('./config/db');
@@ -67,6 +73,8 @@ fs.readdirSync(routesPath).forEach(function(file) {
     console.log('adding route: '+file);
   require(routesPath + '/' + file)(app);
 });
+
+app.use('/api/**/*', jwtCheck);
 
 // Start server
 var port = process.env.PORT || 3000;
