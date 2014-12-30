@@ -19,6 +19,13 @@ var jwtCheck = jwt({
     audience: 'pKB1djQqdSxS8ZK7PyA5ECr7aIw38HnG'
 });
 
+app.use(jwtCheck);
+app.use(function (err, req, res, next) {
+    if (err.name === 'UnauthorizedError') {
+        res.send(401, 'Invalid Token');
+    }
+});
+
 // Connect to database
 require('./config/db');
 app.use(express.static(__dirname + '/public'));
@@ -74,7 +81,7 @@ fs.readdirSync(routesPath).forEach(function(file) {
   require(routesPath + '/' + file)(app);
 });
 
-app.use(jwtCheck.unless({path: ['/token']}));
+
 
 // Start server
 var port = process.env.PORT || 3000;
