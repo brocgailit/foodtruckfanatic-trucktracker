@@ -14,6 +14,8 @@ var app = module.exports = exports.app = express();
 
 app.locals.siteName = "TruckTrackerAPI";
 
+
+//Authentication
 var jwtCheck = jwt({
     secret: new Buffer('vUjHiVUDPtf-JyyGQEz3v8QIT2GUAxCk4T5oNDgIONgdN8reqlvuv1VjSBarpu_B', 'base64'),
     audience: 'pKB1djQqdSxS8ZK7PyA5ECr7aIw38HnG'
@@ -24,6 +26,13 @@ app.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
         res.send(401, 'Invalid Token');
     }
+});
+
+//enable cors
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
 });
 
 // Connect to database
