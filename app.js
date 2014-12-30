@@ -15,8 +15,8 @@ var app = module.exports = exports.app = express();
 app.locals.siteName = "TruckTrackerAPI";
 
 var jwtCheck = jwt({
-    secret: new Buffer('oCuoYmRgyxJVNmQVnloiUtTVZQMjNppWFrpfAiludwmChwkKt0e4qcHgqj83xvg-', 'base64'),
-    audience: 'VwMwgGQiLDpZRg3FanHd4Mqq12kPvDsR'
+    secret: new Buffer('vUjHiVUDPtf-JyyGQEz3v8QIT2GUAxCk4T5oNDgIONgdN8reqlvuv1VjSBarpu_B', 'base64'),
+    audience: 'pKB1djQqdSxS8ZK7PyA5ECr7aIw38HnG'
 });
 
 // Connect to database
