@@ -74,7 +74,7 @@ fs.readdirSync(routesPath).forEach(function(file) {
   require(routesPath + '/' + file)(app);
 });
 
-app.use('/api/**/*', jwtCheck);
+app.use(jwtCheck.unless({path: ['/token']}));
 
 // Start server
 var port = process.env.PORT || 3000;
