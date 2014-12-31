@@ -113,8 +113,8 @@ module.exports = function(app) {
 
 
   app.get('/api/trucks', api.trucks);
-  app.get('/api/truck/:id', api.truck);
-  app.post('/api/truck', api.addTruck);
-  app.put('/api/truck/:id', api.editTruck);
-  app.delete('/api/truck/:id', api.deleteTruck);
+  app.get('/api/trucks/:id', api.truck);
+  app.post('/api/trucks', api.addTruck);
+  app.put('/api/trucks/:id', api.editTruck);
+  app.delete('/api/trucks/:id', api.deleteTruck);
 };

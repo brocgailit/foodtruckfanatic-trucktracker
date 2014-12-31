@@ -127,8 +127,8 @@ module.exports = function(app) {
 
 
   app.get('/api/restaurants', api.restaurants);
-  app.get('/api/restaurant/:id', api.restaurant);
-  app.post('/api/restaurant', api.addRestaurant);
+  app.get('/api/restaurants/:id', api.restaurant);
+  app.post('/api/restaurants', api.addRestaurant);
   app.put('/api/restaurant/:id', api.editRestaurant);
   app.delete('/api/restaurant/:id', api.deleteRestaurant);
 };
