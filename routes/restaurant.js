@@ -6,7 +6,12 @@ module.exports = function(app) {
 
   // ALL
   api.restaurants = function (req, res) {
-    Restaurant.find(function(err, restaurants) {
+
+      if(req.query.name){
+          req.query.name = new RegExp(req.query.name, "i");
+      }
+
+    Restaurant.find(req.query, function(err, restaurants) {
       if (err) {
         res.json(500, err);
       } else {    

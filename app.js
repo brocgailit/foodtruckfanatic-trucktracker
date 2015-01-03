@@ -15,18 +15,7 @@ var app = module.exports = exports.app = express();
 app.locals.siteName = "TruckTrackerAPI";
 
 
-//Authentication
-var jwtCheck = jwt({
-    secret: new Buffer('vUjHiVUDPtf-JyyGQEz3v8QIT2GUAxCk4T5oNDgIONgdN8reqlvuv1VjSBarpu_B', 'base64'),
-    audience: 'pKB1djQqdSxS8ZK7PyA5ECr7aIw38HnG'
-});
 
-app.use(jwtCheck);
-app.use(function (err, req, res, next) {
-    if (err.name === 'UnauthorizedError') {
-        res.send(401, 'Invalid Token');
-    }
-});
 
 //enable cors
 app.use(function(req, res, next) {
@@ -79,6 +68,19 @@ if ('test' == env) {
 }
 
 if ('production' == env) {
+    //Authentication
+    var jwtCheck = jwt({
+        secret: new Buffer('vUjHiVUDPtf-JyyGQEz3v8QIT2GUAxCk4T5oNDgIONgdN8reqlvuv1VjSBarpu_B', 'base64'),
+        audience: 'pKB1djQqdSxS8ZK7PyA5ECr7aIw38HnG'
+    });
+
+    app.use(jwtCheck);
+    app.use(function (err, req, res, next) {
+        if (err.name === 'UnauthorizedError') {
+            res.send(401, 'Invalid Token');
+        }
+    });
+
     app.use(morgan());
      app.use(errorhandler({
         dumpExceptions: false,
