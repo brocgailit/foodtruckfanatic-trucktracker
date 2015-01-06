@@ -42,6 +42,8 @@ module.exports = function(app) {
 
     truck = new Truck(req.body.truck);
 
+      console.log(req.body.truck);
+
     truck.save(function (err) {
       if (!err) {
         console.log("created truck");
