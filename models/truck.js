@@ -6,10 +6,26 @@ var mongoose = require('mongoose'),
 
 var fields = {
 	business_id: { type: ObjectId },
-	name: { type: String },
 	description: { type: String },
 	phone: { type: String },
-	schedule: [{end:Date,repeat:String,close:Date,open:Date,description:String,longitude:Number,latitude:Number}]
+	schedule: [{
+        startdate:Date,
+        enddate:Date,
+        repeat: {
+            enabled: Boolean,
+            selected: [Number],
+            every: Number,
+            type: String,
+            forever: Boolean,
+            text: String
+        },
+        close:Date,
+        open:Date,
+        description:String,
+        street:String,
+        lat:Number,
+        lng:Number
+    }]
 };
 
 var truckSchema = new Schema(fields);

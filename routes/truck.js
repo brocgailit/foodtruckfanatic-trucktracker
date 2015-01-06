@@ -58,16 +58,10 @@ module.exports = function(app) {
     var id = req.params.id;
 
     Truck.findById(id, function (err, truck) {
-
-
     
       if(typeof req.body.truck["business_id"] != 'undefined'){
         truck["business_id"] = req.body.truck["business_id"];
-      }  
-    
-      if(typeof req.body.truck["name"] != 'undefined'){
-        truck["name"] = req.body.truck["name"];
-      }  
+      }
     
       if(typeof req.body.truck["description"] != 'undefined'){
         truck["description"] = req.body.truck["description"];
