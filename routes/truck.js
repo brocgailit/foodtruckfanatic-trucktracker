@@ -6,8 +6,8 @@ module.exports = function(app) {
 
   // ALL
   api.trucks = function (req, res) {
-      console.log('Getting trucks ...');
-    Truck.find(function(err, trucks) {
+
+    Truck.find(req.query, function(err, trucks) {
       if (err) {
         res.json(500, err);
       } else {
