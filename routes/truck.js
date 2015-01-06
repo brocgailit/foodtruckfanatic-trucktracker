@@ -4,6 +4,7 @@ module.exports = function(app) {
       Truck = mongoose.models.Truck,
       api = {};
 
+
   // ALL
   api.trucks = function (req, res) {
 
