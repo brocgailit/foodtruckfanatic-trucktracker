@@ -43,7 +43,7 @@ module.exports = function(app) {
 
     truck = new Truck(req.body.truck);
 
-      console.log(req.body);
+      console.log(req.body.truck.repeat);
 
     truck.save(function (err) {
       if (!err) {
