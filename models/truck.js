@@ -1,7 +1,7 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-		Schema = mongoose.Schema
+		Schema = mongoose.Schema;
 
 var fields = {
 	business: { type: Schema.Types.ObjectId, ref: "Restaurant" },

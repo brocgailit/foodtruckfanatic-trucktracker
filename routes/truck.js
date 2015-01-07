@@ -8,13 +8,15 @@ module.exports = function(app) {
   // ALL
   api.trucks = function (req, res) {
 
-    Truck.find(req.query, function(err, trucks) {
-      if (err) {
-        res.json(500, err);
-      } else {
-          console.log('Found trucks.');
-        res.json({trucks: trucks});
-      }
+    Truck.find(req.query)
+        .populate('business', 'name')
+        .exec(function(err, trucks) {
+          if (err) {
+            res.json(500, err);
+          } else {
+              console.log('Found trucks.');
+            res.json({trucks: trucks});
+          }
     });
   };
 
@@ -25,11 +27,9 @@ module.exports = function(app) {
         .populate('business')
         .exec(function(err, truck) {
             if (err) {
-                //res.json(404, err);
                 res.status(404).json(err)
             } else {
               console.log("found truck");
-              console.log(truck.business.name);
               res.status(200).json({truck: truck});
             }
     });
