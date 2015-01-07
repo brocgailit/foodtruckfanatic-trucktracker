@@ -9,7 +9,7 @@ module.exports = function(app) {
   api.trucks = function (req, res) {
 
     Truck.find(req.query)
-        .populate('business', 'name')
+        .populate('business', 'name cuisine')
         .exec(function(err, trucks) {
           if (err) {
             res.json(500, err);
