@@ -64,8 +64,8 @@ module.exports = function(app) {
 
     Truck.findById(id, function (err, truck) {
     
-      if(typeof req.body.truck["business_id"] != 'undefined'){
-        truck["business_id"] = req.body.truck["business_id"];
+      if(typeof req.body.truck["business"] != 'undefined'){
+        truck["business"] = req.body.truck["business"];
       }
     
       if(typeof req.body.truck["description"] != 'undefined'){

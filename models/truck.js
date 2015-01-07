@@ -1,11 +1,10 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-		Schema = mongoose.Schema,
-		ObjectId = Schema.ObjectId;
+		Schema = mongoose.Schema
 
 var fields = {
-	business_id: { type: ObjectId },
+	business: { type: Schema.Types.ObjectId, ref: "Restaurant" },
 	description: { type: String },
 	phone: { type: String },
 	schedule: [{
@@ -25,8 +24,7 @@ var fields = {
         street:String,
         lat:Number,
         lng:Number
-    }],
-    business: { type: Schema.Types.ObjectId, ref: "Restaurant" }
+    }]
 };
 
 var truckSchema = new Schema(fields);
