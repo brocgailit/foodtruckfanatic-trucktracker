@@ -12,12 +12,12 @@ var fields = {
         startdate:Date,
         enddate:Date,
         repeat: {
-            enabled: Boolean,
-            selected: [Number],
-            every: Number,
-            type: String,
-            forever: Boolean,
-            text: String
+            enabled: {type: Boolean},
+            selected: [{type: Number}],
+            every: {type: Number},
+            type: {type: String},
+            forever: {type: Boolean},
+            text: {type: String}
         },
         close:Date,
         open:Date,
