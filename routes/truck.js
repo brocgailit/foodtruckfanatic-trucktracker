@@ -43,7 +43,7 @@ module.exports = function(app) {
 
     truck = new Truck(req.body.truck);
 
-      console.log(req.body.truck);
+      console.log(req.body);
 
     truck.save(function (err) {
       if (!err) {
