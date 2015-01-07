@@ -2,7 +2,6 @@ module.exports = function(app) {
   // Module dependencies.
   var mongoose = require('mongoose'),
       Truck = mongoose.models.Truck,
-      Restaurant = mongoose.models.Restaurant,
       api = {};
 
 
@@ -30,7 +29,6 @@ module.exports = function(app) {
                 res.status(404).json(err)
             } else {
               console.log("found truck");
-              truck.business = restaurant;
               res.status(200).json({truck: truck});
             }
     });
