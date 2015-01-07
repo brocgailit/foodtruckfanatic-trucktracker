@@ -25,7 +25,8 @@ var fields = {
         street:String,
         lat:Number,
         lng:Number
-    }]
+    }],
+    business: { type: Schema.Types.ObjectId, ref: "Restaurant" }
 };
 
 var truckSchema = new Schema(fields);

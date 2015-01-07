@@ -2,7 +2,6 @@ module.exports = function(app) {
   // Module dependencies.
   var mongoose = require('mongoose'),
       Truck = mongoose.models.Truck,
-      Restaurant = mongoose.models.Truck,
       api = {};
 
 
@@ -14,7 +13,7 @@ module.exports = function(app) {
         res.json(500, err);
       } else {
           console.log('Found trucks.');
-        res.json({trucks: trucks});
+
       }
     });
   };
@@ -23,25 +22,14 @@ module.exports = function(app) {
   api.truck = function (req, res) {
     var id = req.params.id;
     Truck.findOne({ '_id': id }, function(err, truck) {
-
+      truck.populate('business').exec(function(err,docs){
+          console.log(docs);
+      });
       if (err) {
         //res.json(404, err);
         res.status(404).json(err)
       } else {
-
-          Restaurant.findOne({'_id': truck.business_id}, function(err, restaurant){
-              if (err) {
-                  //res.json(404, err);
-                  res.status(404).json(err)
-              }else{
-                  console.log("found truck");
-                  truck.business = restaurant;
-                  console.log(truck.business);
-                  res.status(200).json({truck: truck});
-              }
-          })
-
-
+        res.status(200).json({truck: truck});
       }
     });
   };
