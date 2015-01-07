@@ -2,6 +2,7 @@ module.exports = function(app) {
   // Module dependencies.
   var mongoose = require('mongoose'),
       Truck = mongoose.models.Truck,
+      Restaurant = mongoose.models.Restaurant,
       api = {};
 
 
