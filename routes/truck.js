@@ -36,6 +36,7 @@ module.exports = function(app) {
               }else{
                   console.log("found truck");
                   truck.business = restaurant;
+                  console.log(truck.business);
                   res.status(200).json({truck: truck});
               }
           })
