@@ -22,9 +22,11 @@ module.exports = function(app) {
   api.truck = function (req, res) {
     var id = req.params.id;
     Truck.findOne({ '_id': id }, function(err, truck) {
+        /*
         truck.populate("business").exec(function(err,docs) {
             console.log(docs)
         });
+        */
       if (err) {
         //res.json(404, err);
         res.status(404).json(err)
