@@ -34,6 +34,7 @@ module.exports = function(app) {
                   //res.json(404, err);
                   res.status(404).json(err)
               }else{
+                  console.log("found truck");
                   truck.business = restaurant;
                   res.status(200).json({truck: truck});
               }
@@ -55,8 +56,6 @@ module.exports = function(app) {
     }
 
     truck = new Truck(req.body.truck);
-
-      console.log(req.body.truck.schedule.repeat);
 
     truck.save(function (err) {
       if (!err) {
