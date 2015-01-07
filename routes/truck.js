@@ -13,7 +13,7 @@ module.exports = function(app) {
         res.json(500, err);
       } else {
           console.log('Found trucks.');
-
+        res.json({trucks: trucks});
       }
     });
   };
@@ -22,14 +22,20 @@ module.exports = function(app) {
   api.truck = function (req, res) {
     var id = req.params.id;
     Truck.findOne({ '_id': id }, function(err, truck) {
-      truck.populate('business').exec(function(err,docs){
-          console.log(docs);
-      });
+        truck.populate("business").exec(function(err,docs) {
+            console.log(docs)
+        });
       if (err) {
         //res.json(404, err);
         res.status(404).json(err)
       } else {
-        res.status(200).json({truck: truck});
+
+                  console.log("found truck");
+                  truck.business = restaurant;
+                  res.status(200).json({truck: truck});
+
+
+
       }
     });
   };
