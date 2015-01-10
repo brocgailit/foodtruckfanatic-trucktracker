@@ -107,7 +107,6 @@ module.exports = function(app) {
         } else {
          return res.json(500, err);
         }
-        return res.json(restaurant);
       });
     });
 
@@ -134,6 +133,6 @@ module.exports = function(app) {
   app.get('/api/restaurants', api.restaurants);
   app.get('/api/restaurants/:id', api.restaurant);
   app.post('/api/restaurants', api.addRestaurant);
-  app.put('/api/restaurant/:id', api.editRestaurant);
-  app.delete('/api/restaurant/:id', api.deleteRestaurant);
+  app.put('/api/restaurants/:id', api.editRestaurant);
+  app.delete('/api/restaurants/:id', api.deleteRestaurant);
 };
