@@ -1,11 +1,9 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-		Schema = mongoose.Schema,
-		ObjectId = Schema.ObjectId;
+		Schema = mongoose.Schema;
 
 var fields = {
-    _id: { type: ObjectId },
 	name: { type: String },
 	address: { type: String },
 	city: { type: String },
