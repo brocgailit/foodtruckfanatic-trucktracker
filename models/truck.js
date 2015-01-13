@@ -22,8 +22,11 @@ var fields = {
         open:Date,
         description:String,
         street:String,
-        lat:Number,
-        lng:Number
+        coords:{
+            lat: {type: Number},
+            lng: {type: Number}
+        }
+
     }]
 };
 

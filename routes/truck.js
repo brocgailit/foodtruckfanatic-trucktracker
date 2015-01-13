@@ -78,7 +78,9 @@ module.exports = function(app) {
     
       if(typeof req.body.truck["schedule"] != 'undefined'){
         truck["schedule"] = req.body.truck["schedule"];
-      }  
+      }
+
+        //todo: add more checks here
     
 
       return truck.save(function (err) {
