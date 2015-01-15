@@ -7,6 +7,17 @@ module.exports = function(app) {
   // ALL
   api.restaurants = function (req, res) {
 
+      var user = {};
+
+      //get rid of user parameters (user_) put into user object
+      //todo: make a middleware to take care of this here....and in truck/schedule routes
+      Object.keys(req.query).forEach(function (elem, idx, arr) {
+          if (elem.indexOf('user_') == 0) {
+              user[elem.replace('user_', '')] = req.query[elem];
+              delete req.query[elem];
+          }
+      });
+
       if(req.query.name){
           req.query.name = new RegExp(req.query.name, "i");
       }
