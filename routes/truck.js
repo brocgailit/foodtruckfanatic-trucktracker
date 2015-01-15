@@ -8,6 +8,14 @@ module.exports = function(app) {
   // ALL
   api.trucks = function (req, res) {
 
+    //get rid of user parameters (user_)
+
+    Object.keys(req.query).forEach(function(elem, idx, arr){
+        if(elem.indexOf('user_') == 0){
+            delete req.query[elem];
+        }
+    })
+
     Truck.find(req.query)
         .populate('business', 'name cuisine')
         .exec(function(err, trucks) {
