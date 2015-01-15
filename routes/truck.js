@@ -1,130 +1,129 @@
-module.exports = function(app) {
-  // Module dependencies.
-  var mongoose = require('mongoose'),
-      Truck = mongoose.models.Truck,
-      api = {};
+module.exports = function (app) {
+    // Module dependencies.
+    var mongoose = require('mongoose'),
+        Truck = mongoose.models.Truck,
+        api = {};
 
 
-  // ALL
-  api.trucks = function (req, res) {
+    // ALL
+    api.trucks = function (req, res) {
 
-    var user = {};
-    //get rid of user parameters (user_) put into user object
-    Object.keys(req.query).forEach(function(elem, idx, arr){
-        if(elem.indexOf('user_') == 0){
-            user[elem] = req.query[elem];
-            delete req.query[elem];
-        }
-    })
+        var user = {};
 
-    Truck.find(req.query)
-        .populate('business', 'name cuisine')
-        .exec(function(err, trucks) {
-          if (err) {
-            res.json(500, err);
-          } else {
-              console.log('Found trucks.');
-            res.json({trucks: trucks});
-          }
-    });
-  };
-
-  // GET
-  api.truck = function (req, res) {
-    var id = req.params.id;
-    Truck.findOne({ '_id': id} )
-        .populate('business')
-        .exec(function(err, truck) {
-            if (err) {
-                res.status(404).json(err)
-            } else {
-              console.log("found truck");
-              res.status(200).json({truck: truck});
+        //get rid of user parameters (user_) put into user object
+        Object.keys(req.query).forEach(function (elem, idx, arr) {
+            if (elem.indexOf('user_') == 0) {
+                user[elem.replace('user_', '')] = req.query[elem];
+                delete req.query[elem];
             }
-    });
-  };
+        });
 
-  // POST
-  api.addTruck = function (req, res) {
-    
-    var truck;
-      
-    if(typeof req.body.truck == 'undefined'){
-         res.status(500);
-         return res.json({message: 'truck is undefined'});
-    }
 
-    truck = new Truck(req.body.truck);
+        Truck.find(req.query)
+            .populate('business', 'name cuisine')
+            .exec(function (err, trucks) {
+                if (err) {
+                    res.json(500, err);
+                } else {
+                    console.log('Found trucks.');
+                    res.json({trucks: trucks});
+                }
+            });
 
-    truck.save(function (err) {
-      if (!err) {
-        console.log("created truck");
-        return res.json(201, truck.toObject());
-      } else {
-        return res.json(500, err);
-      }
-    });
+    };
 
-  };
+    // GET
+    api.truck = function (req, res) {
+        var id = req.params.id;
+        Truck.findOne({ '_id': id})
+            .populate('business')
+            .exec(function (err, truck) {
+                if (err) {
+                    res.status(404).json(err)
+                } else {
+                    console.log("found truck");
+                    res.status(200).json({truck: truck});
+                }
+            });
+    };
 
-  // PUT
-  api.editTruck = function (req, res) {
-    var id = req.params.id;
+    // POST
+    api.addTruck = function (req, res) {
 
-    Truck.findById(id, function (err, truck) {
-    
-      if(typeof req.body.truck["business"] != 'undefined'){
-        truck["business"] = req.body.truck["business"];
-      }
-    
-      if(typeof req.body.truck["description"] != 'undefined'){
-        truck["description"] = req.body.truck["description"];
-      }  
-    
-      if(typeof req.body.truck["phone"] != 'undefined'){
-        truck["phone"] = req.body.truck["phone"];
-      }  
-    
-      if(typeof req.body.truck["schedule"] != 'undefined'){
-        truck["schedule"] = req.body.truck["schedule"];
-      }
+        var truck;
 
-        //todo: add more checks here
-    
-
-      return truck.save(function (err) {
-        if (!err) {
-          console.log("updated truck");
-          return res.json(200, truck.toObject());        
-        } else {
-         return res.json(500, err);
+        if (typeof req.body.truck == 'undefined') {
+            res.status(500);
+            return res.json({message: 'truck is undefined'});
         }
-      });
-    });
 
-  };
+        truck = new Truck(req.body.truck);
 
-  // DELETE
-  api.deleteTruck = function (req, res) {
-    var id = req.params.id;
-    return Truck.findById(id, function (err, truck) {
-      return truck.remove(function (err) {
-        if (!err) {
-          console.log("removed truck");
-          return res.send(204);
-        } else {
-          console.log(err);
-          return res.json(500, err);
-        }
-      });
-    });
+        truck.save(function (err) {
+            if (!err) {
+                console.log("created truck");
+                return res.json(201, truck.toObject());
+            } else {
+                return res.json(500, err);
+            }
+        });
 
-  };
+    };
+
+    // PUT
+    api.editTruck = function (req, res) {
+        var id = req.params.id;
+
+        Truck.findById(id, function (err, truck) {
+
+            if (typeof req.body.truck["business"] != 'undefined') {
+                truck["business"] = req.body.truck["business"];
+            }
+
+            if (typeof req.body.truck["description"] != 'undefined') {
+                truck["description"] = req.body.truck["description"];
+            }
+
+            if (typeof req.body.truck["phone"] != 'undefined') {
+                truck["phone"] = req.body.truck["phone"];
+            }
+
+            //todo: add more checks here
 
 
-  app.get('/api/trucks', api.trucks);
-  app.get('/api/trucks/:id', api.truck);
-  app.post('/api/trucks', api.addTruck);
-  app.put('/api/trucks/:id', api.editTruck);
-  app.delete('/api/trucks/:id', api.deleteTruck);
+            return truck.save(function (err) {
+                if (!err) {
+                    console.log("updated truck");
+                    return res.json(200, truck.toObject());
+                } else {
+                    return res.json(500, err);
+                }
+            });
+        });
+
+    };
+
+    // DELETE
+    api.deleteTruck = function (req, res) {
+        var id = req.params.id;
+        return Truck.findById(id, function (err, truck) {
+            return truck.remove(function (err) {
+                if (!err) {
+                    console.log("removed truck");
+                    return res.send(204);
+                } else {
+                    console.log(err);
+                    return res.json(500, err);
+                }
+            });
+        });
+
+    };
+
+
+    app.get('/api/trucks', api.trucks);
+    app.get('/api/trucks/:id', api.truck);
+    app.post('/api/trucks', api.addTruck);
+    app.put('/api/trucks/:id', api.editTruck);
+    app.delete('/api/trucks/:id', api.deleteTruck);
 };
