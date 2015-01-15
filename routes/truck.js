@@ -8,10 +8,11 @@ module.exports = function(app) {
   // ALL
   api.trucks = function (req, res) {
 
-    //get rid of user parameters (user_)
-
+    var user = {};
+    //get rid of user parameters (user_) put into user object
     Object.keys(req.query).forEach(function(elem, idx, arr){
         if(elem.indexOf('user_') == 0){
+            user[elem] = req.query[elem];
             delete req.query[elem];
         }
     })
