@@ -2,6 +2,7 @@ module.exports = function (app) {
     // Module dependencies.
     var mongoose = require('mongoose'),
         Schedule = mongoose.models.Schedule,
+        Restaurant = mongoose.models.Restaurant,
         api = {};
 
 
@@ -25,8 +26,13 @@ module.exports = function (app) {
                 if (err) {
                     res.json(500, err);
                 } else {
-                    console.log('Found schedules.');
-                    res.json({schedules: schedules});
+                    Restaurant.populate(schedules, {
+                        path: 'truck.business'
+                    }, function(err, sched){
+                        console.log("found schedule");
+                        res.status(200).json({schedules: sched});
+                    });
+
                 }
             });
 
@@ -41,8 +47,13 @@ module.exports = function (app) {
                 if (err) {
                     res.status(404).json(err)
                 } else {
-                    console.log("found schedule");
-                    res.status(200).json({schedule: schedule});
+
+                    Restaurant.populate(schedule, {
+                        path: 'truck.business'
+                    }, function(err, sched){
+                        console.log("found schedule");
+                        res.status(200).json({schedule: sched});
+                    });
                 }
             });
     };
