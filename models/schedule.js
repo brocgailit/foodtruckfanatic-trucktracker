@@ -29,7 +29,8 @@ var fields = {
 
 };
 
-scheduleSchema = new Schema(fields);
+//retain key order to prevent storing longitude before latitudes
+scheduleSchema = new Schema(fields, { retainKeyOrder: true });
 scheduleSchema.index({coords: '2d'});
 
 module.exports = mongoose.model('Schedule', scheduleSchema);
