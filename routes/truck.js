@@ -2,6 +2,7 @@ module.exports = function (app) {
     // Module dependencies.
     var mongoose = require('mongoose'),
         Truck = mongoose.models.Truck,
+        Schedule = mongoose.models.Schedule,
         api = {};
 
 
@@ -86,6 +87,13 @@ module.exports = function (app) {
 
             if (typeof req.body.truck["phone"] != 'undefined') {
                 truck["phone"] = req.body.truck["phone"];
+            }
+
+            if (typeof req.body.truck["schedule"] != 'undefined') {
+                req.body.truck["schedule"].forEach(function (elem, idx, arr) {
+                    console.log(elem);
+                });
+
             }
 
             //todo: add more checks here
