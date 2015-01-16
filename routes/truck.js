@@ -40,10 +40,22 @@ module.exports = function (app) {
             .populate('business')
             .exec(function (err, truck) {
                 if (err) {
-                    res.status(404).json(err)
+                    res.status(404).json(err);
                 } else {
                     console.log("found truck");
+
+                    Schedule.find({truck:truck._id}, function(err, schedule){
+                        if(err){
+                            res.status(404).json(err);
+                        }else{
+                            truck.schedule = schedule;
+
+                        }
+                    })
+
                     res.status(200).json({truck: truck});
+
+
                 }
             });
     };
@@ -87,13 +99,6 @@ module.exports = function (app) {
 
             if (typeof req.body.truck["phone"] != 'undefined') {
                 truck["phone"] = req.body.truck["phone"];
-            }
-
-            if (typeof req.body.truck["schedule"] != 'undefined') {
-                req.body.truck["schedule"].forEach(function (elem, idx, arr) {
-                    console.log(elem);
-                });
-
             }
 
             //todo: add more checks here
