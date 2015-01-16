@@ -48,13 +48,11 @@ module.exports = function (app) {
                         if(err){
                             res.status(404).json(err);
                         }else{
+                            truck = truck.toObject();
                             truck.schedule = schedule;
-
+                            res.status(200).json({truck: truck});
                         }
                     })
-
-                    res.status(200).json({truck: truck});
-
 
                 }
             });
