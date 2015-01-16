@@ -24,7 +24,8 @@ var fields = {
         coords: {
             lng: {type: Number},
             lat: {type: Number}
-        }
+        },
+        distance: {type: Number}
 
 };
 

@@ -4,7 +4,7 @@ var mongoose = require('mongoose'),
 		Schema = mongoose.Schema;
 
 var fields = {
-	name: { type: String },
+	name: { type: String, required: true },
 	address: { type: String },
 	city: { type: String },
 	state: { type: String },

@@ -19,12 +19,43 @@ module.exports = function (app) {
             }
         });
 
+        user.lng = parseFloat(user.lng);
+        user.lat = parseFloat(user.lat);
 
+        Schedule.geoNear( [user.lng, user.lat], {
+            num : 20,
+            $maxDistance: 10,
+            spherical:true,
+            distanceMultiplier:3959
+        },function(err, schedules){
+            if(err) {
+                res.status(500).json(err);
+            }else{
+                schedules = schedules.map(function(x){
+                    x.obj.distance = x.dis;
+                    return new Schedule(x.obj);
+                });
+                Schedule.populate(schedules, {path: 'truck'}, function (err, schedules) {
+                        if (err) {
+                            res.status(500).json(err);
+                        } else {
+                            Restaurant.populate(schedules, {
+                                path: 'truck.business'
+                            }, function(err, sched){
+                                console.log("found schedule");
+                                res.status(200).json({schedules: sched});
+                            });
+
+                        }
+                    });
+            }
+        });
+/*
         Schedule.find(req.query)
             .populate('truck')
             .exec(function (err, schedules) {
                 if (err) {
-                    res.json(500, err);
+                    res.status(500).json(err);
                 } else {
                     Restaurant.populate(schedules, {
                         path: 'truck.business'
@@ -35,6 +66,7 @@ module.exports = function (app) {
 
                 }
             });
+            */
 
     };
 
