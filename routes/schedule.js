@@ -26,7 +26,8 @@ module.exports = function (app) {
             num : 20,
             $maxDistance: 10,
             spherical:true,
-            distanceMultiplier:3959
+            distanceMultiplier:3959,
+            query: req.query
         },function(err, schedules){
             if(err) {
                 res.status(500).json(err);
