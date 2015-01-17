@@ -53,19 +53,30 @@ module.exports = function (app) {
 
     };
 
-    // ALL
-    api.schedules = function (req, res) {
+    api.stripUserData = function(query){
 
         var user = {};
 
-        //using two loops to avoid converting user parameters to object ids
-        Object.keys(req.query).forEach(function (elem, idx, arr) {
+        Object.keys(query).forEach(function (elem, idx, arr) {
             //get rid of user parameters (user_) put into user object
             if ( elem.indexOf('user_') == 0) {
-                user[elem.replace('user_', '')] = req.query[elem];
-                delete req.query[elem];
+                user[elem.replace('user_', '')] = query[elem];
+                delete query[elem];
             }
         });
+
+        //todo:  add checks for user parameters
+        user.lng = parseFloat(user.lng);
+        user.lat = parseFloat(user.lat);
+        user.timestamp = new Date(parseInt(user.timestamp));
+
+        return user;
+    }
+
+    // ALL
+    api.schedules = function (req, res) {
+
+        var user = api.stripUserData(req.query);
 
         Object.keys(req.query).forEach(function (elem, idx, arr) {
             //convert possible objectids
@@ -74,8 +85,7 @@ module.exports = function (app) {
             }
         });
 
-        user.lng = parseFloat(user.lng);
-        user.lat = parseFloat(user.lat);
+
 
         Schedule.geoNear( [user.lng, user.lat], {
             num : 20,
@@ -98,11 +108,11 @@ module.exports = function (app) {
                             Restaurant.populate(schedules, {
                                 path: 'truck.business'
                             }, function(err, sched){
-                                console.log("found schedules -----------------------------------------------------------");
-                                var time = new Date(parseInt(user.timestamp));
-                                sched.forEach(function(elem, idx, arr){
-                                    elem.isOpen = api.locationIsOpen(time,elem);
-                                })
+
+                                    sched.forEach(function(elem, idx, arr){
+                                        elem.isOpen = api.locationIsOpen(user.timestamp,elem);
+                                    });
+
 
                                 res.status(200).json({schedules: sched});
                             });
@@ -116,6 +126,9 @@ module.exports = function (app) {
 
     // GET
     api.schedule = function (req, res) {
+
+        var user = api.stripUserData(req.query);
+
         var id = req.params.id;
         Schedule.findOne({ '_id': id})
             .populate('truck')
@@ -128,6 +141,9 @@ module.exports = function (app) {
                         path: 'truck.business'
                     }, function(err, sched){
                         console.log("found schedule");
+
+                        sched.isOpen = api.locationIsOpen(user.timestamp, sched);
+
                         res.status(200).json({schedule: sched});
                     });
                 }
