@@ -11,22 +11,21 @@ module.exports = function (app) {
 
         var user = {};
 
-
+        //using two loops to avoid converting user parameters to object ids
         Object.keys(req.query).forEach(function (elem, idx, arr) {
-
-            //convert possible objectids
-            if(mongoose.Types.ObjectId.isValid(req.query[elem])){
-                req.query[elem] = mongoose.Types.ObjectId(req.query[elem]);
-            }
-
             //get rid of user parameters (user_) put into user object
-            if (elem.indexOf('user_') == 0) {
+            if ( elem.indexOf('user_') == 0) {
                 user[elem.replace('user_', '')] = req.query[elem];
                 delete req.query[elem];
             }
         });
 
-        //todo: query needs to convert object ids for geonear truck: mongoose.Types.ObjectId("5498886326016123168ec813")
+        Object.keys(req.query).forEach(function (elem, idx, arr) {
+            //convert possible objectids
+            if(mongoose.Types.ObjectId.isValid(req.query[elem])){
+                req.query[elem] = mongoose.Types.ObjectId(req.query[elem]);
+            }
+        });
 
         user.lng = parseFloat(user.lng);
         user.lat = parseFloat(user.lat);
@@ -60,23 +59,6 @@ module.exports = function (app) {
                     });
             }
         });
-/*
-        Schedule.find(req.query)
-            .populate('truck')
-            .exec(function (err, schedules) {
-                if (err) {
-                    res.status(500).json(err);
-                } else {
-                    Restaurant.populate(schedules, {
-                        path: 'truck.business'
-                    }, function(err, sched){
-                        console.log("found schedule");
-                        res.status(200).json({schedules: sched});
-                    });
-
-                }
-            });
-            */
 
     };
 
