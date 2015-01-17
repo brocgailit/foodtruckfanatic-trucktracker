@@ -110,7 +110,10 @@ module.exports = function (app) {
                             }, function(err, sched){
 
                                     sched.forEach(function(elem, idx, arr){
+                                        console.log('checking '+user.timestamp);
+
                                         elem.isOpen = api.locationIsOpen(user.timestamp,elem);
+                                        console.log(elem.isOpen);
                                     });
 
 
