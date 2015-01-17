@@ -11,13 +11,22 @@ module.exports = function (app) {
 
         var user = {};
 
-        //get rid of user parameters (user_) put into user object
+
         Object.keys(req.query).forEach(function (elem, idx, arr) {
+
+            //convert possible objectids
+            if(mongoose.Types.ObjectId.isValid(req.query[elem])){
+                req.query[elem] = mongoose.Types.ObjectId(req.query[elem]);
+            }
+
+            //get rid of user parameters (user_) put into user object
             if (elem.indexOf('user_') == 0) {
                 user[elem.replace('user_', '')] = req.query[elem];
                 delete req.query[elem];
             }
         });
+
+        //todo: query needs to convert object ids for geonear truck: mongoose.Types.ObjectId("5498886326016123168ec813")
 
         user.lng = parseFloat(user.lng);
         user.lat = parseFloat(user.lat);
