@@ -111,6 +111,7 @@ module.exports = function (app) {
 
                                     sched.forEach(function(elem, idx, arr){
                                         console.log('checking '+user.timestamp);
+                                        console.log('against '+elem.startdate);
 
                                         elem.isOpen = api.locationIsOpen(user.timestamp,elem);
                                         console.log(elem.isOpen);
