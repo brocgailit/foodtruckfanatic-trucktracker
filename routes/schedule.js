@@ -5,6 +5,53 @@ module.exports = function (app) {
         Restaurant = mongoose.models.Restaurant,
         api = {};
 
+    api.locationIsOpen = function(today, location){
+
+        var isOpen = false;
+
+        var hours = {
+            open:  location.open,
+            close:  location.close,
+            startdate:  location.startdate,
+            enddate:  location.enddate
+        };
+
+
+        var withinHours = function(check, start, end){
+
+            //get rid of date information
+            start = new Date(0,0,0,start.getHours(),start.getMinutes());
+            end = new Date(0,0,0,end.getHours(),end.getMinutes());
+            check = new Date(0,0,0,check.getHours(),check.getMinutes());
+
+            if (start.getTime() < check.getTime() && end.getTime() > check.getTime() ){
+                return true;
+            }else{
+                return false;
+            }
+        }
+
+        if(hours.startdate <= today){
+
+            if(location.repeat.enabled) {
+                if (location.repeat.selected.indexOf(today.getDay()) > -1) {
+                    isOpen = withinHours(today,hours.open, hours.close);
+                }
+            }else{
+
+                if(location.startdate.getDate() == today.getDate() &&
+                    location.startdate.getMonth() == today.getMonth() &&
+                    location.startdate.getYear() == today.getYear()){
+
+                    isOpen = withinHours(today,hours.open, hours.close);
+                }
+
+            }
+        }
+
+        return isOpen;
+
+    };
 
     // ALL
     api.schedules = function (req, res) {
@@ -51,7 +98,12 @@ module.exports = function (app) {
                             Restaurant.populate(schedules, {
                                 path: 'truck.business'
                             }, function(err, sched){
-                                console.log("found schedule");
+                                console.log("found schedules -----------------------------------------------------------");
+                                var time = new Date(parseInt(user.timestamp));
+                                sched.forEach(function(elem, idx, arr){
+                                    elem.isOpen = api.locationIsOpen(time,elem);
+                                })
+
                                 res.status(200).json({schedules: sched});
                             });
 

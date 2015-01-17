@@ -25,11 +25,12 @@ var fields = {
             lng: {type: Number},
             lat: {type: Number}
         },
-        distance: {type: Number}
+        distance: {type: Number},
+        isOpen: {type: Boolean}
 
 };
 
-//retain key order to prevent storing longitude before latitudes
+//retain key order to prevent storing longitude before latitudes ... not sure if this is implemented yet
 scheduleSchema = new Schema(fields, { retainKeyOrder: true });
 scheduleSchema.index({coords: '2d'});
 
