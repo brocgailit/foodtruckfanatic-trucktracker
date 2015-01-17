@@ -44,6 +44,9 @@ module.exports = function (app) {
                 } else {
                     console.log("found truck");
 
+                    res.status(200).json({truck: truck});
+
+                    /*
                     Schedule.find({truck:truck._id}, function(err, schedule){
                         if(err){
                             res.status(404).json(err);
@@ -53,6 +56,7 @@ module.exports = function (app) {
                             res.status(200).json({truck: truck});
                         }
                     })
+                    */
 
                 }
             });
