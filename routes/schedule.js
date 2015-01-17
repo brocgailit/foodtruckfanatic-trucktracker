@@ -22,6 +22,11 @@ module.exports = function (app) {
             //get rid of date information
             start = new Date(0,0,0,start.getHours(),start.getMinutes());
             end = new Date(0,0,0,end.getHours(),end.getMinutes());
+            if(end.getHours() < start.getHours()){
+                //need to check next day
+                end.setDate(start.getDate()+1);
+            }
+
             check = new Date(0,0,0,check.getHours(),check.getMinutes());
 
             if (start.getTime() < check.getTime() && end.getTime() > check.getTime() ){
