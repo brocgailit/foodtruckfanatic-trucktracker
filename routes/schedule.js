@@ -19,21 +19,9 @@ module.exports = function (app) {
         var withinHours = function(check, start, end){
 
             //get rid of date information
-            start = new Date(check.getYear(),check.getMonth(),check.getDate(),start.getHours(),start.getMinutes());
-            end = new Date(check.getYear(),check.getMonth(),check.getDate(),end.getHours(),end.getMinutes());
-            check = new Date(check.getYear(),check.getMonth(),check.getDate(),check.getHours(), check.getMinutes());
-
-
-
-
-            if(end.getHours() < start.getHours()){
-                console.log('Start is before End');
-                //need to check next day
-                //todo:  well it's not exactly that simple ... will be valid if start time is after now
-                console.log('changing '+end.getDate()+' to '+(end.getDate()+1));
-                end.setDate(end.getDate()+1);
-
-            }
+            //start = new Date(check.getYear(),check.getMonth(),check.getDate(),start.getHours(),start.getMinutes());
+            //end = new Date(check.getYear(),check.getMonth(),check.getDate(),end.getHours(),end.getMinutes());
+            check = new Date(start.getYear(),start.getMonth(),start.getDate(),check.getHours(), check.getMinutes());
 
             console.log('Start:'+start.getDate()+' '+start.getHours()+':'+start.getMinutes()+ ' | '+'End:'+end.getDate()+' '+end.getHours()+':'+end.getMinutes()+ ' | '+'Check:'+check.getDate()+' '+check.getHours()+':'+check.getMinutes()+ ' | ');
 
