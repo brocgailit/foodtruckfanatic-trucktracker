@@ -30,6 +30,7 @@ module.exports = function (app) {
             check = new Date(0,0,0,check.getHours(),check.getMinutes());
 
             if (start.getTime() < check.getTime() && end.getTime() > check.getTime() ){
+                console.log('now is within the hours');
                 return true;
             }else{
                 return false;
@@ -38,8 +39,12 @@ module.exports = function (app) {
 
         if(hours.startdate <= today){
 
+            console.log(hours.startdate+' <= '+today);
+
             if(location.repeat.enabled) {
+                console.log('repeat is enabled');
                 if (location.repeat.selected.indexOf(day) > -1) {
+                    console.log(day+' is in repeat array '+location.repeat.selected);
                     isOpen = withinHours(today,hours.open, hours.close);
                 }
             }else{
