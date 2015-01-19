@@ -21,7 +21,10 @@ module.exports = function (app) {
             //get rid of date information
             //start = new Date(start.getUTCYear(),start.getMonth(),start.getDate(),start.getHours(),start.getMinutes());
             //end = new Date(start.getYear(),start.getMonth(),start.getDate(),end.getHours(),end.getMinutes());
-            check = new Date(start.getUTCFullYear(),start.getUTCMonth(),start.getUTCDate(),check.getHours(), check.getMinutes());
+            //check = new Date(start.getUTCFullYear(),start.getUTCMonth(),start.getUTCDate(),check.getHours(), check.getMinutes());
+            check.setYear(start.getUTCFullYear());
+            check.setMonth(start.getUTCMonth());
+            check.setDate(start.getUTCDate());
 
             console.log(start);
 
