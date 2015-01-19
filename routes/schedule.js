@@ -27,7 +27,9 @@ module.exports = function (app) {
                 console.log('Start is before End');
                 //need to check next day
                 //todo:  well it's not exactly that simple ... will be valid if start time is after now
+                console.log('changing '+end.getDate()+' to '+(end.getDate()+1));
                 end.setDate(end.getDate()+1);
+
             }
 
             if (start.getTime() < check.getTime() && end.getTime() > check.getTime() ){
