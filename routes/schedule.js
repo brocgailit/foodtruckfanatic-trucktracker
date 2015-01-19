@@ -23,6 +23,8 @@ module.exports = function (app) {
             end = new Date(0,0,0,end.getHours(),end.getMinutes());
             check = new Date(0,0,0, check.getHours(), check.getMinutes());
 
+            console.log('Start:'+start.getHours()+':'+start.getMinutes()+ ' | '+'End:'+end.getHours()+':'+end.getMinutes()+ ' | '+'Check:'+check.getHours()+':'+check.getMinutes()+ ' | ')
+
             if(end.getHours() < start.getHours()){
                 console.log('Start is before End');
                 //need to check next day
@@ -36,6 +38,7 @@ module.exports = function (app) {
                 console.log('now is within the hours');
                 return true;
             }else{
+                console.log('now is NOT within the hours');
                 return false;
             }
         }
