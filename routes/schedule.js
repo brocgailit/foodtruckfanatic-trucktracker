@@ -5,7 +5,7 @@ module.exports = function (app) {
         Restaurant = mongoose.models.Restaurant,
         api = {};
 
-    api.locationIsOpen = function(today, location){
+    api.locationIsOpen = function(today, location, offset){
 
         var isOpen = false;
 
@@ -14,7 +14,9 @@ module.exports = function (app) {
             close:  location.close,
             startdate:  location.startdate,
             enddate:  location.enddate
-        };
+        }
+
+        var today_offset = new Date(today.getTime() + offset*60000);
 
 
         var withinHours = function(check, start, end){
@@ -24,6 +26,7 @@ module.exports = function (app) {
             end = new Date(0,0,0,end.getHours(),end.getMinutes());
             if(end.getHours() < start.getHours()){
                 //need to check next day
+                //todo:  well it's not exactly that simple ... will be valid if start time is after now
                 end.setDate(start.getDate()+1);
             }
 
@@ -36,17 +39,17 @@ module.exports = function (app) {
             }
         }
 
-        if(hours.startdate <= today){
+        if(hours.startdate <= today_offset){
 
             if(location.repeat.enabled) {
-                if (location.repeat.selected.indexOf(today.getDay()) > -1) {
+                if (location.repeat.selected.indexOf(today_offset.getDay()) > -1) {
                     isOpen = withinHours(today,hours.open, hours.close);
                 }
             }else{
 
-                if(location.startdate.getDate() == today.getDate() &&
-                    location.startdate.getMonth() == today.getMonth() &&
-                    location.startdate.getYear() == today.getYear()){
+                if(location.startdate.getDate() == today_offset.getDate() &&
+                    location.startdate.getMonth() == today_offset.getMonth() &&
+                    location.startdate.getYear() == today_offset.getYear()){
 
                     isOpen = withinHours(today,hours.open, hours.close);
                 }
@@ -119,7 +122,7 @@ module.exports = function (app) {
                                         console.log('against from'+elem.open);
                                         console.log('against to'+elem.close);
 
-                                        elem.isOpen = api.locationIsOpen(user.timestamp,elem);
+                                        elem.isOpen = api.locationIsOpen(user.timestamp,elem, user.timezoneOffset);
                                         console.log(elem.isOpen);
                                     });
 
@@ -152,7 +155,7 @@ module.exports = function (app) {
                     }, function(err, sched){
                         console.log("found schedule");
 
-                        sched.isOpen = api.locationIsOpen(user.timestamp, sched);
+                        sched.isOpen = api.locationIsOpen(user.timestamp, sched, user.timezoneOffset);
 
                         res.status(200).json({schedule: sched});
                     });
