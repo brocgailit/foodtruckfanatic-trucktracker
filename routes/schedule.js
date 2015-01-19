@@ -25,7 +25,7 @@ module.exports = function (app) {
 
             console.log('Start:'+start.getDate()+' '+start.getHours()+':'+start.getMinutes()+ ' | '+'End:'+end.getDate()+' '+end.getHours()+':'+end.getMinutes()+ ' | '+'Check:'+check.getDate()+' '+check.getHours()+':'+check.getMinutes()+ ' | ');
 
-            /*
+
             if(end.getHours() < start.getHours()){
                 console.log('Start is before End');
                 //need to check next day
@@ -34,13 +34,15 @@ module.exports = function (app) {
                 end.setDate(end.getDate()+1);
 
             }
-            */
+
 
             if (start.getTime() < check.getTime() && end.getTime() > check.getTime() ){
                 console.log('now is within the hours');
+
                 return true;
             }else{
                 console.log('now is NOT within the hours');
+                console.log('Start:'+start.getTime()+ ' | '+'End:'+end.getTime()+ ' | '+'Check:'+check.getTime()+ ' | ');
                 return false;
             }
         }
