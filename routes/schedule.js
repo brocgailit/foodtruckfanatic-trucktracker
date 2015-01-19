@@ -19,9 +19,9 @@ module.exports = function (app) {
         var withinHours = function(check, start, end){
 
             //get rid of date information
-            start = new Date(0,0,0,start.getHours(),start.getMinutes());
-            end = new Date(0,0,0,end.getHours(),end.getMinutes());
-            check = new Date(0,0,0, check.getHours(), check.getMinutes());
+            start = new Date(check.getYear(),check.getMonth(),check.getDay(),start.getHours(),start.getMinutes());
+            end = new Date(check.getYear(),check.getMonth(),check.getDay(),end.getHours(),end.getMinutes());
+            check = new Date(check.getYear(),check.getMonth(),check.getDay(),check.getHours(), check.getMinutes());
 
 
 
