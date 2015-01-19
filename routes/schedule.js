@@ -17,7 +17,10 @@ module.exports = function (app) {
         }
 
         //there are apparent issues when checking DAYS against the check
-        var today_offset = new Date(today.getTime() - offset*60000);
+        var today_offset = new Date(today.getTime() + (offset - new Date().getTimezoneOffset()) * 60000);
+        console.log(offset);
+        console.log(new Date().getTimezoneOffset());
+
 
 
         var withinHours = function(check, start, end){
