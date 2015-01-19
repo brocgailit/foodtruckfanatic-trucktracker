@@ -19,8 +19,9 @@ module.exports = function (app) {
         var withinHours = function(check, start, end){
 
             //get rid of date information
-            start = new Date(0,0,0,start.getHours(),start.getMinutes());
-            end = new Date(0,0,0,end.getHours(),end.getMinutes());
+            //todo: fix this!!!!
+            start = new Date(0,0,0,start.getUTCHours(),start.getUTCMinutes());
+            end = new Date(0,0,0,end.getUTCHours(),end.getUTCMinutes());
             check = new Date(0,0,0 ,new Date().getHours(), new Date().getMinutes());
 
             console.log(start.getTime());
