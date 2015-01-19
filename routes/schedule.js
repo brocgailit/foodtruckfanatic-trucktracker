@@ -19,9 +19,11 @@ module.exports = function (app) {
         var withinHours = function(check, start, end){
 
             //get rid of date information
-            //start = new Date(check.getYear(),check.getMonth(),check.getDate(),start.getHours(),start.getMinutes());
-            //end = new Date(check.getYear(),check.getMonth(),check.getDate(),end.getHours(),end.getMinutes());
-            check = new Date(start.getYear(),start.getMonth(),start.getDate(),check.getHours(), check.getMinutes());
+            //start = new Date(start.getUTCYear(),start.getMonth(),start.getDate(),start.getHours(),start.getMinutes());
+            //end = new Date(start.getYear(),start.getMonth(),start.getDate(),end.getHours(),end.getMinutes());
+            check = new Date(start.getUTCFullYear(),start.getUTCMonth(),start.getUTCDate(),check.getHours(), check.getMinutes());
+
+            console.log(start);
 
             console.log('Start:'+start.getDate()+' '+start.getHours()+':'+start.getMinutes()+ ' | '+'End:'+end.getDate()+' '+end.getHours()+':'+end.getMinutes()+ ' | '+'Check:'+check.getDate()+' '+check.getHours()+':'+check.getMinutes()+ ' | ');
 
