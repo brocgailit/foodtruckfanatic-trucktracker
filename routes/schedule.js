@@ -23,7 +23,7 @@ module.exports = function (app) {
             end = new Date(0,0,0,end.getHours(),end.getMinutes());
             check = new Date(0,0,0, check.getHours(), check.getMinutes());
 
-            console.log('Start:'+start.getHours()+':'+start.getMinutes()+ ' | '+'End:'+end.getHours()+':'+end.getMinutes()+ ' | '+'Check:'+check.getHours()+':'+check.getMinutes()+ ' | ');
+            console.log('Start:'+start.getDate()+' '+start.getHours()+':'+start.getMinutes()+ ' | '+'End:'+end.getDate()+' '+end.getHours()+':'+end.getMinutes()+ ' | '+'Check:'+check.getDate()+' '+check.getHours()+':'+check.getMinutes()+ ' | ');
 
             /*
             if(end.getHours() < start.getHours()){
