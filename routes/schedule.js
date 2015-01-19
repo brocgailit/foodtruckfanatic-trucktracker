@@ -16,7 +16,8 @@ module.exports = function (app) {
             enddate:  location.enddate
         }
 
-        var today_offset = new Date(today.getTime() + offset*60000);
+        //there are apparent issues when checking DAYS against the check
+        var today_offset = new Date(today.getTime() - offset*60000);
 
 
         var withinHours = function(check, start, end){
