@@ -36,7 +36,7 @@ module.exports = function (app) {
             }
         }
 
-        if(hours.startdate <= today_offset){
+        if(hours.startdate <= today){
 
             if(location.repeat.enabled) {
                 if (location.repeat.selected.indexOf(day) > -1) {
