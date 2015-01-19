@@ -19,14 +19,22 @@ module.exports = function (app) {
         var withinHours = function(check, start, end){
 
             //get rid of date information
-            //todo: fix this!!!!
-            start = new Date(0,0,0,start.getUTCHours(),start.getUTCMinutes());
-            end = new Date(0,0,0,end.getUTCHours(),end.getUTCMinutes());
-            check = new Date(0,0,0 ,new Date().getHours(), new Date().getMinutes());
 
-            console.log(start.getTime());
-            console.log(end.getTime());
-            console.log(check.getTime());
+            check = new Date( Date.parse(new Date().toUTCString()) )
+
+            var spanopen = end.getTime()-start.getTime();
+
+            start.setDate(check.getDate());
+            start.setMonth(check.getMonth());
+            start.setYear(check.getFullYear());
+            end = new Date(start.getTime() + spanopen);
+
+            console.log('-------------------------------------------------------------------------');
+            console.log(start);
+            console.log(end);
+            console.log(check);
+            console.log('-------------------------------------------------------------------------');
+
 
             console.log('Start:'+start.getDate()+' '+start.getHours()+':'+start.getMinutes()+ ' | '+'End:'+end.getDate()+' '+end.getHours()+':'+end.getMinutes()+ ' | '+'Check:'+check.getDate()+' '+check.getHours()+':'+check.getMinutes()+ ' | ');
 
