@@ -27,6 +27,8 @@ module.exports = function (app) {
             check.setDate(start.getUTCDate());
 
             console.log(start);
+            console.log(end);
+            console.log(check);
 
             console.log('Start:'+start.getDate()+' '+start.getHours()+':'+start.getMinutes()+ ' | '+'End:'+end.getDate()+' '+end.getHours()+':'+end.getMinutes()+ ' | '+'Check:'+check.getDate()+' '+check.getHours()+':'+check.getMinutes()+ ' | ');
 
