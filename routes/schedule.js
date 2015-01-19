@@ -5,7 +5,7 @@ module.exports = function (app) {
         Restaurant = mongoose.models.Restaurant,
         api = {};
 
-    api.locationIsOpen = function(today, location, offset){
+    api.locationIsOpen = function(today, day, location){
 
         var isOpen = false;
 
@@ -15,13 +15,6 @@ module.exports = function (app) {
             startdate:  location.startdate,
             enddate:  location.enddate
         }
-
-        //there are apparent issues when checking DAYS against the check
-        var today_offset = new Date(today.getTime() + (offset - new Date().getTimezoneOffset()) * 60000);
-        console.log(offset);
-        console.log(new Date().getTimezoneOffset());
-
-
 
         var withinHours = function(check, start, end){
 
@@ -46,16 +39,16 @@ module.exports = function (app) {
         if(hours.startdate <= today_offset){
 
             if(location.repeat.enabled) {
-                if (location.repeat.selected.indexOf(today_offset.getDay()) > -1) {
+                if (location.repeat.selected.indexOf(day) > -1) {
                     isOpen = withinHours(today,hours.open, hours.close);
                 }
             }else{
 
-                if(location.startdate.getDate() == today_offset.getDate() &&
-                    location.startdate.getMonth() == today_offset.getMonth() &&
-                    location.startdate.getYear() == today_offset.getYear()){
+                if(location.startdate.getDate() == today.getDate() &&
+                    location.startdate.getMonth() == today.getMonth() &&
+                    location.startdate.getYear() == today.getYear()){
 
-                    isOpen = withinHours(today,hours.open, hours.close);
+                    isOpen = withinHours(today, hours.open, hours.close);
                 }
 
             }
@@ -126,7 +119,7 @@ module.exports = function (app) {
                                         console.log('against from'+elem.open);
                                         console.log('against to'+elem.close);
 
-                                        elem.isOpen = api.locationIsOpen(user.timestamp,elem, user.timezoneOffset);
+                                        elem.isOpen = api.locationIsOpen(user.timestamp, user.dayofweek, elem);
                                         console.log(elem.isOpen);
                                     });
 
