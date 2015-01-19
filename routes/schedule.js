@@ -21,13 +21,14 @@ module.exports = function (app) {
             //get rid of date information
             start = new Date(0,0,0,start.getHours(),start.getMinutes());
             end = new Date(0,0,0,end.getHours(),end.getMinutes());
+            check = new Date(0,0,0, check.getHours(), check.getMinutes());
+
             if(end.getHours() < start.getHours()){
+                console.log('Start is before End');
                 //need to check next day
                 //todo:  well it's not exactly that simple ... will be valid if start time is after now
-                end.setDate(start.getDate()+1);
+                end.setDate(end.getDate()+1);
             }
-
-            check = new Date(0,0,0,check.getHours(),check.getMinutes());
 
             if (start.getTime() < check.getTime() && end.getTime() > check.getTime() ){
                 console.log('now is within the hours');
