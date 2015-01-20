@@ -12,7 +12,8 @@ var fields = {
 	zip: { type: String },
 	phone: { type: String },
 	website: { type: String },
-	cuisine: [{type:String}]
+	cuisine: [{type:String}],
+    truck_count: {type: Number}
 };
 
 var restaurantSchema = new Schema(fields);

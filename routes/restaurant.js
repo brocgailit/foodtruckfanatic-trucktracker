@@ -33,11 +33,12 @@ module.exports = function (app) {
                         if (err) {
                             res.json(500, err);
                         }else{
-                            elem.truck_count = count
-                            res.json({restaurants: restaurants});
+                            elem.truck_count = count;
                         }
                     })
                 });
+
+                res.json({restaurants: restaurants});
 
             }
         });
