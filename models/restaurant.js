@@ -5,6 +5,7 @@ var mongoose = require('mongoose'),
 
 var fields = {
 	name: { type: String, required: true },
+    description: { type: String},
 	address: { type: String },
 	city: { type: String },
 	state: { type: String },
