@@ -1,6 +1,7 @@
 module.exports = function (app) {
     // Module dependencies.
     var mongoose = require('mongoose'),
+        q = require('q'),
         Restaurant = mongoose.models.Restaurant,
         Truck = mongoose.models.Truck,
         api = {};
@@ -28,17 +29,29 @@ module.exports = function (app) {
                 res.json(500, err);
             } else {
 
-                restaurants.forEach(function(elem, idx, arr){
-                    Truck.count({business:elem._id}, function(err, count){
+                var promises = [];
+
+                restaurants.forEach(function(restaurant, idx, arr){
+
+                    var deferred = q.defer();
+
+                    Truck.count({business:restaurant._id}, function(err, count){
                         if (err) {
                             res.json(500, err);
+                            deferred.reject(err);
                         }else{
-                            elem.truck_count = count;
+                            restaurant.truckCount = count;
+                            deferred.resolve(count);
                         }
                     })
+
+                    promises.push(deferred.promise)
                 });
 
-                res.json({restaurants: restaurants});
+                q.all(promises).then(function(){
+                    res.json({restaurants: restaurants});
+                })
+
 
             }
         });
