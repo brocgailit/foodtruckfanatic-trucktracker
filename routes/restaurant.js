@@ -2,6 +2,7 @@ module.exports = function (app) {
     // Module dependencies.
     var mongoose = require('mongoose'),
         Restaurant = mongoose.models.Restaurant,
+        Truck = mongoose.models.Truck,
         api = {};
 
     // ALL
@@ -26,7 +27,18 @@ module.exports = function (app) {
             if (err) {
                 res.json(500, err);
             } else {
-                res.json({restaurants: restaurants});
+
+                restaurants.forEach(function(elem, idx, arr){
+                    Truck.count({business:elem._id}, function(err, count){
+                        if (err) {
+                            res.json(500, err);
+                        }else{
+                            elem.truck_count = count
+                            res.json({restaurants: restaurants});
+                        }
+                    })
+                });
+
             }
         });
     };
