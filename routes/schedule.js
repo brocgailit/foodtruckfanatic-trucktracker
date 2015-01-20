@@ -24,10 +24,10 @@ module.exports = function (app) {
 
             var spanopen = end.getTime()-start.getTime();
 
-            start.setDate(check.getDate());
-            start.setMonth(check.getMonth());
-            start.setYear(check.getFullYear());
-            end = new Date(start.getTime() + spanopen);
+            end.setDate(check.getDate());
+            end.setMonth(check.getMonth());
+            end.setYear(check.getFullYear());
+            start = new Date(end.getTime() - spanopen);
 
             console.log('-------------------------------------------------------------------------');
             console.log(start);
