@@ -5,9 +5,11 @@ module.exports = function (app) {
         Restaurant = mongoose.models.Restaurant,
         api = {};
 
-    api.locationIsOpen = function(today, day, location){
+    api.locationIsOpen = function(location){
 
         var isOpen = false;
+        var now = new Date();
+        var yesterday = new Date(now).setDate(now.getDate()-1);
 
         var hours = {
             open:  location.open,
@@ -16,63 +18,93 @@ module.exports = function (app) {
             enddate:  location.enddate
         }
 
-        var withinHours = function(check, start, end){
+        var withinHours = function(check, start, end, dayOffset){
 
-            //get rid of date information
+            if(typeof dayOffset === 'undefined'){
+                dayOffset = 0;
+            }
 
-            check = new Date( Date.parse(new Date().toUTCString()) )
+            //make copies of date objects
+            start = new Date(start);
+            end = new Date(end);
 
             var spanopen = end.getTime()-start.getTime();
 
-            end.setDate(check.getDate());
-            end.setMonth(check.getMonth());
-            end.setYear(check.getFullYear());
-            start = new Date(end.getTime() - spanopen);
+            start.setDate(check.getDate()+dayOffset);
+            start.setMonth(check.getMonth());
+            start.setYear(check.getFullYear());
+
+            end = new Date(start.getTime() + spanopen);
 
             console.log('-------------------------------------------------------------------------');
-            console.log(start);
-            console.log(end);
-            console.log(check);
+            console.log('Start: '+start);
+            console.log('End:   '+end);
+            console.log('Check: '+check);
             console.log('-------------------------------------------------------------------------');
 
-            console.log('Start:'+start.getDate()+' '+start.getHours()+':'+start.getMinutes()+ ' | '+'End:'+end.getDate()+' '+end.getHours()+':'+end.getMinutes()+ ' | '+'Check:'+check.getDate()+' '+check.getHours()+':'+check.getMinutes()+ ' | ');
+            console.log((start.getTime() < check.getTime() && end.getTime() > check.getTime()));
+            return (start.getTime() < check.getTime() && end.getTime() > check.getTime());
 
-
-            if (start.getTime() < check.getTime() && end.getTime() > check.getTime() ){
-                console.log('now is within the hours');
-
-                return true;
-            }else{
-                console.log('now is NOT within the hours');
-                console.log('Start:'+start.getTime()+ ' | '+'End:'+end.getTime()+ ' | '+'Check:'+check.getTime()+ ' | ');
-                return false;
-            }
         }
 
-        if(hours.startdate <= today){
+        if(hours.startdate <= now){
 
-            console.log(hours.startdate+' <= '+today);
+            console.log(hours.startdate+' <= '+now);
 
             if(location.repeat.enabled) {
                 console.log('repeat is enabled');
-                if (location.repeat.selected.indexOf(day) > -1) {
-                    console.log(day+' is in repeat array '+location.repeat.selected);
-                    isOpen = withinHours(today,hours.open, hours.close);
+                //check if today or yesterday are in repeat array
+                var idxToday = location.repeat.selected.indexOf(now.getDay()) > -1;
+                var idxYesterday = location.repeat.selected.indexOf(now.getDay()-1) > -1;
+                var openFromToday = false;
+                var openFromYesterday = false;
+
+                if (idxToday || idxYesterday) {
+                    if(idxToday){
+                        console.log('Today is in repeat array '+location.repeat.selected);
+                        openFromToday = withinHours(now, hours.open, hours.close);
+                    }
+                    if(idxYesterday){
+                        console.log('Yesterday is in repeat array '+location.repeat.selected);
+                        var dayDiff = hours.close.getDay()-hours.open.getDay();
+                        if(dayDiff == 1 || dayDiff == -7){
+                            console.log('Yesterday\'s hour rollover into today');
+                            openFromYesterday = withinHours(now, hours.open, hours.close, -1);
+                        }
+                    }
+
+                    isOpen = openFromToday || openFromYesterday;
+
                 }
             }else{
 
-                if(location.startdate.getDate() == today.getDate() &&
-                    location.startdate.getMonth() == today.getMonth() &&
-                    location.startdate.getYear() == today.getYear()){
+                var openFromToday = false;
+                var openFromYesterday = false;
 
-                    isOpen = withinHours(today, hours.open, hours.close);
+                if(location.startdate.getDate() == now.getDate() &&
+                    location.startdate.getMonth() == now.getMonth() &&
+                    location.startdate.getFullYear() == now.getFullYear()){
+
+                    openFromToday = withinHours(now, hours.open, hours.close);
                 }
+
+                if(location.startdate.getDate() == yesterday.getDate() &&
+                    location.startdate.getMonth() == yesterday.getMonth() &&
+                    location.startdate.getFullYear() == yesterday.getFullYear()){
+
+                    var dayDiff = hours.close.getDay()-hours.open.getDay();
+                    if(dayDiff == 1 || dayDiff == -7){
+                        console.log('Yesterday\'s hour rollover into today');
+                        openFromYesterday = withinHours(now, hours.open, hours.close, -1);
+                    }
+                }
+
+                isOpen = openFromToday || openFromYesterday;
 
             }
         }
 
         return isOpen;
-
     };
 
     api.stripUserData = function(query){
@@ -132,12 +164,7 @@ module.exports = function (app) {
                             }, function(err, sched){
 
                                     sched.forEach(function(elem, idx, arr){
-                                        console.log('checking '+user.timestamp);
-                                        console.log('against from'+elem.open);
-                                        console.log('against to'+elem.close);
-
-                                        elem.isOpen = api.locationIsOpen(user.timestamp, user.dayofweek, elem);
-                                        console.log(elem.isOpen);
+                                        elem.isOpen = api.locationIsOpen(elem);
                                     });
 
 
@@ -169,7 +196,7 @@ module.exports = function (app) {
                     }, function(err, sched){
                         console.log("found schedule");
 
-                        sched.isOpen = api.locationIsOpen(user.timestamp, sched, user.timezoneOffset);
+                        sched.isOpen = api.locationIsOpen(sched);
 
                         res.status(200).json({schedule: sched});
                     });
