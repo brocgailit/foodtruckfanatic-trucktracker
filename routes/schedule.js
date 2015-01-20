@@ -35,7 +35,6 @@ module.exports = function (app) {
             console.log(check);
             console.log('-------------------------------------------------------------------------');
 
-
             console.log('Start:'+start.getDate()+' '+start.getHours()+':'+start.getMinutes()+ ' | '+'End:'+end.getDate()+' '+end.getHours()+':'+end.getMinutes()+ ' | '+'Check:'+check.getDate()+' '+check.getHours()+':'+check.getMinutes()+ ' | ');
 
 
