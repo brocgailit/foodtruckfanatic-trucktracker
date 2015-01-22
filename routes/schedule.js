@@ -5,11 +5,13 @@ module.exports = function (app) {
         Restaurant = mongoose.models.Restaurant,
         api = {};
 
+    //todo: use virtuals for this?
     api.locationIsOpen = function(location){
 
         var isOpen = false;
         var now = new Date();
-        var yesterday = new Date(now).setDate(now.getDate()-1);
+        var yesterday = new Date(now);
+        yesterday.setDate(now.getDate()-1)
 
         var hours = {
             open:  location.open,
@@ -81,12 +83,14 @@ module.exports = function (app) {
                 var openFromToday = false;
                 var openFromYesterday = false;
 
+                //todo: errrrrroooorrr  location.startdate has no method get date???
                 if(location.startdate.getDate() == now.getDate() &&
                     location.startdate.getMonth() == now.getMonth() &&
                     location.startdate.getFullYear() == now.getFullYear()){
 
                     openFromToday = withinHours(now, hours.open, hours.close);
                 }
+
 
                 if(location.startdate.getDate() == yesterday.getDate() &&
                     location.startdate.getMonth() == yesterday.getMonth() &&
@@ -162,12 +166,9 @@ module.exports = function (app) {
                             Restaurant.populate(schedules, {
                                 path: 'truck.business'
                             }, function(err, sched){
-
                                     sched.forEach(function(elem, idx, arr){
                                         elem.isOpen = api.locationIsOpen(elem);
                                     });
-
-
                                 res.status(200).json({schedules: sched});
                             });
 
