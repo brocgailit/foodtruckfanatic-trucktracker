@@ -30,6 +30,8 @@ var fields = {
 
 };
 
+//todo: get rid of repeat text ... use a filter on the client side instead
+
 //retain key order to prevent storing longitude before latitudes ... not sure if this is implemented yet
 scheduleSchema = new Schema(fields, { retainKeyOrder: true });
 scheduleSchema.index({coords: '2d'});

@@ -1,12 +1,44 @@
 module.exports = function (app) {
     // Module dependencies.
     var mongoose = require('mongoose'),
+        gmaputil = require('googlemapsutil'),
         Schedule = mongoose.models.Schedule,
         Restaurant = mongoose.models.Restaurant,
         api = {};
 
     //todo: use virtuals for this?
     api.locationIsOpen = function(location){
+
+        //console.log(location);
+
+        //this will not work via http ... requires https
+        gmaputil.timezone(39.6034810, -119.6822510, 1331161200, {key:'AIzaSyAU3V3fXMUokcFaPxJ_SEnAkgo_hjmccB0'}, function(err, result){
+            if(!err){
+                console.log(result);
+            }else{
+                console.log('maps error:'+err);
+            }
+        });
+
+        /*
+        gmaputil.timezone(location.coords.lat, location.coords.lng, new Date().getTime(), null, function(err, result){
+            if(!err){
+                console.log(result);
+            }else{
+                console.log('maps error:'+err);
+            }
+        });
+        */
+
+/*
+        gmaputil.directions('Toronto', 'Montreal', null, function(err, result){
+            if(!err){
+                console.log(result);
+            }else{
+                console.log('maps error:'+err);
+            }
+        })
+        */
 
         var isOpen = false;
         var now = new Date();
@@ -55,11 +87,40 @@ module.exports = function (app) {
 
             if(location.repeat.enabled) {
                 console.log('repeat is enabled');
+
+                /*
+                 todo:  server needs to know time zone of truck ... perhaps
+                 this will return false positives, etc. after 4PM PST will be next day in UTC (16[4PM] + 8 = 24)
+                 set the time zone in the Schedule due to the possibility of Truck spanning time zones
+                 in certain locations.
+
+                 see https://developers.google.com/maps/documentation/timezone/  ...limit of 2500 requests for free
+                 per day... should be non-issue ...
+
+                 javascript dates have (date).getTimezoneOffset() ... returns minutes diff
+
+                 one thing to note ... when saving the startdate, it is saved in UTC. this will also affect the date
+
+                 open times cannot be calculated based on date or day, but must be calculated within the 24 hour period.
+                 consider savings times and leap years, etc.
+
+                 i.e. --- (open > location.startdate && open < location.startdate + 24 hr) indicates same day
+
+                 how does server/client know how to convert? --> timezones are stored in date objects.  angular resource
+                 will convert to proper utc string before sending
+
+                 so...when is Monday/Tuesday/etc in UTC?
+                 */
+
                 //check if today or yesterday are in repeat array
                 var idxToday = location.repeat.selected.indexOf(now.getDay()) > -1;
                 var idxYesterday = location.repeat.selected.indexOf(now.getDay()-1) > -1;
                 var openFromToday = false;
                 var openFromYesterday = false;
+
+                console.log('today starts:     '+location.startdate.getHours());
+
+
 
                 if (idxToday || idxYesterday) {
                     if(idxToday){
@@ -83,7 +144,8 @@ module.exports = function (app) {
                 var openFromToday = false;
                 var openFromYesterday = false;
 
-                //todo: errrrrroooorrr  location.startdate has no method get date???
+
+
                 if(location.startdate.getDate() == now.getDate() &&
                     location.startdate.getMonth() == now.getMonth() &&
                     location.startdate.getFullYear() == now.getFullYear()){
