@@ -2,48 +2,79 @@ module.exports = function (app) {
     // Module dependencies.
     var mongoose = require('mongoose'),
         gmaputil = require('googlemapsutil'),
+        q = require('q'),
         Schedule = mongoose.models.Schedule,
         Restaurant = mongoose.models.Restaurant,
         api = {};
 
+    api.getTimezone = function(location){
+
+        var deferred = q.defer();
+        var now = new Date();
+        var thresholdMins = 15;
+
+        //todo: maybe check at hour change?
+        if ( typeof location.timezone != 'undefined' && (now.getTime() - location.timezone.timestamp < thresholdMins * 60 * 1000)) {
+
+            deferred.resolve(location.timezone);
+
+        }else {
+
+            gmaputil.timezone(location.coords.lat, location.coords.lng, now.getTime() / 1000, null, function (err, result) {
+
+                if (!err) {
+                    result = JSON.parse(result);
+
+                    if (result.status == 'OK') {
+
+                        Schedule.findById(location._id, function (err, schedule) {
+                            schedule.timezone = {
+                                rawOffset: result.rawOffset,
+                                dstOffset: result.dstOffset,
+                                timestamp: (new Date()).getTime()
+                            };
+
+                            if (!err) {
+                                schedule.save(function (err) {
+                                    if (!err) {
+                                        console.log("saved new timezone information");
+                                        deferred.resolve(schedule.timezone);
+                                    } else {
+                                        deferred.reject(new Error("error saving timezone: " + err));
+                                    }
+                                });
+                            }
+                        })
+
+                    } else {
+
+                        deferred.reject(new Error(result.status));
+                    }
+
+                } else {
+
+                    deferred.reject(new Error('request error: ' + err));
+
+                }
+            });
+        }
+
+        return deferred.promise;
+    }
+
     //todo: use virtuals for this?
     api.locationIsOpen = function(location){
-
-        //console.log(location);
-
-        //this will not work via http ... requires https
-        gmaputil.timezone(39.6034810, -119.6822510, 1331161200, {key:'AIzaSyAU3V3fXMUokcFaPxJ_SEnAkgo_hjmccB0'}, function(err, result){
-            if(!err){
-                console.log(result);
-            }else{
-                console.log('maps error:'+err);
-            }
-        });
-
-        /*
-        gmaputil.timezone(location.coords.lat, location.coords.lng, new Date().getTime(), null, function(err, result){
-            if(!err){
-                console.log(result);
-            }else{
-                console.log('maps error:'+err);
-            }
-        });
-        */
-
-/*
-        gmaputil.directions('Toronto', 'Montreal', null, function(err, result){
-            if(!err){
-                console.log(result);
-            }else{
-                console.log('maps error:'+err);
-            }
-        })
-        */
 
         var isOpen = false;
         var now = new Date();
         var yesterday = new Date(now);
-        yesterday.setDate(now.getDate()-1)
+        yesterday.setDate(now.getDate()-1);
+
+        api.getTimezone(location).then( function(timezone){
+            console.log(timezone);
+            var serverTZOffset = now.getTimezoneOffset()*-60;
+            console.log('timezone diff: '+(serverTZOffset-timezone.rawOffset-timezone.dstOffset));
+        })
 
         var hours = {
             open:  location.open,

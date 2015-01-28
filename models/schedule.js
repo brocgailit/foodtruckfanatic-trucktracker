@@ -25,6 +25,11 @@ var fields = {
             lng: {type: Number},
             lat: {type: Number}
         },
+        timezone: {
+            rawOffset: {type: Number},
+            dstOffset: {type: Number},
+            timestamp: {type: Number}
+        },
         distance: {type: Number},
         isOpen: {type: Boolean}
 
