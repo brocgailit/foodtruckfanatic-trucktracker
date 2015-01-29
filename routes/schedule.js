@@ -117,6 +117,9 @@ module.exports = function (app) {
                 now.setSeconds(now.getSeconds()+serverTZDiff);
                 yesterday.setSeconds(yesterday.getSeconds()+serverTZDiff);
 
+                console.log('TODAY IS:     '+now);
+                console.log('YESTERDAY IS: '+yesterday);
+
                 if(hours.startdate <= now){
 
                     console.log(hours.startdate+' <= '+now);
