@@ -114,8 +114,8 @@ module.exports = function (app) {
                 //adjsut UTC to truck's local time to check days and hours
                 var serverTZOffset = now.getTimezoneOffset()*-60;
                 var serverTZDiff = serverTZOffset-timezone.rawOffset-timezone.dstOffset;
-                now.setSeconds(now.getSeconds()+serverTZDiff);
-                yesterday.setSeconds(yesterday.getSeconds()+serverTZDiff);
+                now.setSeconds(now.getSeconds()-serverTZDiff);
+                yesterday.setSeconds(yesterday.getSeconds()-serverTZDiff);
 
                 console.log('TODAY IS:     '+now);
                 console.log('YESTERDAY IS: '+yesterday);
