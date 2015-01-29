@@ -65,16 +65,7 @@ module.exports = function (app) {
     //todo: use virtuals for this?
     api.locationIsOpen = function(location){
 
-        var isOpen = false;
-        var now = new Date();
-        var yesterday = new Date(now);
-        yesterday.setDate(now.getDate()-1);
-
-        api.getTimezone(location).then( function(timezone){
-            console.log(timezone);
-            var serverTZOffset = now.getTimezoneOffset()*-60;
-            console.log('timezone diff: '+(serverTZOffset-timezone.rawOffset-timezone.dstOffset));
-        })
+        var deferred = q.defer();
 
         var hours = {
             open:  location.open,
@@ -82,6 +73,11 @@ module.exports = function (app) {
             startdate:  location.startdate,
             enddate:  location.enddate
         }
+
+        var isOpen = false;
+        var now = new Date();
+        var yesterday = new Date(now)
+        yesterday.setDate(now.getDate()-1);
 
         var withinHours = function(check, start, end, dayOffset){
 
@@ -112,96 +108,84 @@ module.exports = function (app) {
 
         }
 
-        if(hours.startdate <= now){
+        api.getTimezone(location)
+            .then( function(timezone){
 
-            console.log(hours.startdate+' <= '+now);
+                //adjsut UTC to truck's local time to check days and hours
+                var serverTZOffset = now.getTimezoneOffset()*-60;
+                var serverTZDiff = serverTZOffset-timezone.rawOffset-timezone.dstOffset;
+                now.setSeconds(now.getSeconds()+serverTZDiff);
+                yesterday.setSeconds(yesterday.getSeconds()+serverTZDiff);
 
-            if(location.repeat.enabled) {
-                console.log('repeat is enabled');
+                if(hours.startdate <= now){
 
-                /*
-                 todo:  server needs to know time zone of truck ... perhaps
-                 this will return false positives, etc. after 4PM PST will be next day in UTC (16[4PM] + 8 = 24)
-                 set the time zone in the Schedule due to the possibility of Truck spanning time zones
-                 in certain locations.
+                    console.log(hours.startdate+' <= '+now);
 
-                 see https://developers.google.com/maps/documentation/timezone/  ...limit of 2500 requests for free
-                 per day... should be non-issue ...
+                    if(location.repeat.enabled) {
+                        console.log('repeat is enabled');
 
-                 javascript dates have (date).getTimezoneOffset() ... returns minutes diff
+                        //check if today or yesterday are in repeat array
+                        var idxToday = location.repeat.selected.indexOf(now.getDay()) > -1;
+                        var idxYesterday = location.repeat.selected.indexOf(now.getDay()-1) > -1;
+                        var openFromToday = false;
+                        var openFromYesterday = false;
 
-                 one thing to note ... when saving the startdate, it is saved in UTC. this will also affect the date
+                        if (idxToday || idxYesterday) {
+                            if(idxToday){
+                                console.log('Today is in repeat array '+location.repeat.selected);
+                                openFromToday = withinHours(now, hours.open, hours.close);
+                            }
+                            if(idxYesterday){
+                                console.log('Yesterday is in repeat array '+location.repeat.selected);
+                                var dayDiff = hours.close.getDay()-hours.open.getDay();
+                                if(dayDiff == 1 || dayDiff == -7){
+                                    console.log('Yesterday\'s hour rollover into today');
+                                    openFromYesterday = withinHours(now, hours.open, hours.close, -1);
+                                }
+                            }
 
-                 open times cannot be calculated based on date or day, but must be calculated within the 24 hour period.
-                 consider savings times and leap years, etc.
+                            isOpen = openFromToday || openFromYesterday;
 
-                 i.e. --- (open > location.startdate && open < location.startdate + 24 hr) indicates same day
-
-                 how does server/client know how to convert? --> timezones are stored in date objects.  angular resource
-                 will convert to proper utc string before sending
-
-                 so...when is Monday/Tuesday/etc in UTC?
-                 */
-
-                //check if today or yesterday are in repeat array
-                var idxToday = location.repeat.selected.indexOf(now.getDay()) > -1;
-                var idxYesterday = location.repeat.selected.indexOf(now.getDay()-1) > -1;
-                var openFromToday = false;
-                var openFromYesterday = false;
-
-                console.log('today starts:     '+location.startdate.getHours());
-
-
-
-                if (idxToday || idxYesterday) {
-                    if(idxToday){
-                        console.log('Today is in repeat array '+location.repeat.selected);
-                        openFromToday = withinHours(now, hours.open, hours.close);
-                    }
-                    if(idxYesterday){
-                        console.log('Yesterday is in repeat array '+location.repeat.selected);
-                        var dayDiff = hours.close.getDay()-hours.open.getDay();
-                        if(dayDiff == 1 || dayDiff == -7){
-                            console.log('Yesterday\'s hour rollover into today');
-                            openFromYesterday = withinHours(now, hours.open, hours.close, -1);
                         }
+                    }else{
+
+                        var openFromToday = false;
+                        var openFromYesterday = false;
+
+
+
+                        if(location.startdate.getDate() == now.getDate() &&
+                            location.startdate.getMonth() == now.getMonth() &&
+                            location.startdate.getFullYear() == now.getFullYear()){
+
+                            openFromToday = withinHours(now, hours.open, hours.close);
+                        }
+
+
+                        if(location.startdate.getDate() == yesterday.getDate() &&
+                            location.startdate.getMonth() == yesterday.getMonth() &&
+                            location.startdate.getFullYear() == yesterday.getFullYear()){
+
+                            var dayDiff = hours.close.getDay()-hours.open.getDay();
+                            if(dayDiff == 1 || dayDiff == -7){
+                                console.log('Yesterday\'s hour rollover into today');
+                                openFromYesterday = withinHours(now, hours.open, hours.close, -1);
+                            }
+                        }
+
+                        isOpen = openFromToday || openFromYesterday;
+
                     }
-
-                    isOpen = openFromToday || openFromYesterday;
-
-                }
-            }else{
-
-                var openFromToday = false;
-                var openFromYesterday = false;
-
-
-
-                if(location.startdate.getDate() == now.getDate() &&
-                    location.startdate.getMonth() == now.getMonth() &&
-                    location.startdate.getFullYear() == now.getFullYear()){
-
-                    openFromToday = withinHours(now, hours.open, hours.close);
                 }
 
+                deferred.resolve(isOpen);
+            })
+            .catch(function(err){
+                deferred.reject(err);
+            });
 
-                if(location.startdate.getDate() == yesterday.getDate() &&
-                    location.startdate.getMonth() == yesterday.getMonth() &&
-                    location.startdate.getFullYear() == yesterday.getFullYear()){
+        return deferred.promise;
 
-                    var dayDiff = hours.close.getDay()-hours.open.getDay();
-                    if(dayDiff == 1 || dayDiff == -7){
-                        console.log('Yesterday\'s hour rollover into today');
-                        openFromYesterday = withinHours(now, hours.open, hours.close, -1);
-                    }
-                }
-
-                isOpen = openFromToday || openFromYesterday;
-
-            }
-        }
-
-        return isOpen;
     };
 
     api.stripUserData = function(query){
@@ -236,8 +220,6 @@ module.exports = function (app) {
             }
         });
 
-
-
         Schedule.geoNear( [user.lng, user.lat], {
             num : 20,
             $maxDistance: 10,
@@ -259,10 +241,31 @@ module.exports = function (app) {
                             Restaurant.populate(schedules, {
                                 path: 'truck.business'
                             }, function(err, sched){
-                                    sched.forEach(function(elem, idx, arr){
-                                        elem.isOpen = api.locationIsOpen(elem);
+                                var promises = [];
+
+                                sched.forEach(function(elem, idx, arr){
+
+                                    var deferred = q.defer();
+                                    api.locationIsOpen(elem)
+                                        .then(function(open){
+                                            elem.isOpen = open;
+                                            deferred.resolve(open);
+                                            promises.push(deferred.promise);
+                                        })
+                                        .catch(function (err){
+                                            deferred.reject(err);
+                                            promises.push(deferred.promise);
+                                        });
+                                });
+
+                                q.all(promises)
+                                    .then(function(){
+                                        res.status(200).json({schedules: sched});
+                                    })
+                                    .catch(function(err){
+                                        res.status(404).json(err)
                                     });
-                                res.status(200).json({schedules: sched});
+
                             });
 
                         }
