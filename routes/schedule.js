@@ -16,13 +16,16 @@ module.exports = function (app) {
         //todo: maybe check at hour change?
         if ( typeof location.timezone != 'undefined' && (now.getTime() - location.timezone.timestamp < thresholdMins * 60 * 1000)) {
 
+            console.log('using stored timezone');
             deferred.resolve(location.timezone);
 
         }else {
 
+            console.log('getting timezone from google');
             gmaputil.timezone(location.coords.lat, location.coords.lng, now.getTime() / 1000, null, function (err, result) {
 
                 if (!err) {
+                    console.log('found timezone');
                     result = JSON.parse(result);
 
                     if (result.status == 'OK') {
@@ -53,6 +56,7 @@ module.exports = function (app) {
 
                 } else {
 
+                    console.log('Could not get timezone '+err);
                     deferred.reject(new Error('request error: ' + err));
 
                 }
