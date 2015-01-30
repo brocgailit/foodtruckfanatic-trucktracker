@@ -79,10 +79,10 @@ module.exports = function (app) {
         var deferred = q.defer();
 
         var hours = {
-            open:  location.open,
-            close:  location.close,
-            startdate:  location.startdate,
-            enddate:  location.enddate
+            open:  new Date(location.open),
+            close:  new Date(location.close),
+            startdate:  new Date(location.startdate),
+            enddate:  new Date(location.enddate)
         }
 
         var isOpen = false;
