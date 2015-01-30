@@ -74,7 +74,14 @@ module.exports = function (app) {
 
 
         var deferred = q.defer();
-        var hours = {};
+
+        var hours = {
+            open:  location.open,
+            close:  location.close,
+            startdate:  location.startdate,
+            enddate:  location.enddate
+        }
+
         var isOpen = false;
         var now = new Date();
         var yesterday = new Date(now)
@@ -117,12 +124,8 @@ module.exports = function (app) {
                 var serverTZDiff = serverTZOffset-timezone.rawOffset-timezone.dstOffset;
                 now.setSeconds(now.getSeconds()-serverTZDiff);
                 yesterday.setSeconds(yesterday.getSeconds()-serverTZDiff);
-                hours = {
-                    open:  location.open.setSeconds(location.open.getSeconds()-serverTZDiff),
-                    close:  location.close.setSeconds(location.close.getSeconds()-serverTZDiff),
-                    startdate:  location.startdate,
-                    enddate:  location.enddate
-                }
+                hours.open.setSeconds(location.open.getSeconds()-serverTZDiff),
+                hours.close.setSeconds(location.close.getSeconds()-serverTZDiff),
 
                 console.log('TODAY IS:     '+now);
                 console.log('YESTERDAY IS: '+yesterday);
