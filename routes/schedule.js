@@ -9,25 +9,27 @@ module.exports = function (app) {
 
 
 
+
     api.getTimezone = function(location){
 
         var deferred = q.defer();
         var now = new Date();
         var thresholdMins = 15;
+        var log = 'getting timezone for location';
 
         //todo: maybe check at hour change?
         if ( typeof location.timezone != 'undefined' && (now.getTime() - location.timezone.timestamp < thresholdMins * 60 * 1000)) {
 
-            console.log('using stored timezone');
+            log += '\nusing stored timezone';
             deferred.resolve(location.timezone);
 
         }else {
 
-            console.log('getting timezone from google');
+            log += '\ngetting timezone from google';
             gmaputil.timezone(location.coords.lat, location.coords.lng, now.getTime() / 1000, null, function (err, result) {
 
                 if (!err) {
-                    console.log('found timezone');
+                    log += '\nfound timezone';
                     result = JSON.parse(result);
 
                     if (result.status == 'OK') {
@@ -42,7 +44,7 @@ module.exports = function (app) {
                             if (!err) {
                                 schedule.save(function (err) {
                                     if (!err) {
-                                        console.log("saved new timezone information");
+                                        log += '\nsaved new timezone information';
                                         deferred.resolve(schedule.timezone);
                                     } else {
                                         deferred.reject(new Error("error saving timezone: " + err));
@@ -58,20 +60,21 @@ module.exports = function (app) {
 
                 } else {
 
-                    console.log('Could not get timezone '+err);
+                    log += '\nCould not get timezone '+err;
                     deferred.reject(new Error('request error: ' + err));
 
                 }
             });
         }
 
+        console.log(log);
         return deferred.promise;
     }
 
     //todo: use virtuals for this?
     api.locationIsOpen = function(location){
 
-
+        var log = '';
 
         var deferred = q.defer();
 
@@ -105,13 +108,13 @@ module.exports = function (app) {
 
             end = new Date(start.getTime() + spanopen);
 
-            console.log('-------------------------------------------------------------------------');
-            console.log('Start: '+start);
-            console.log('End:   '+end);
-            console.log('Check: '+check);
-            console.log('-------------------------------------------------------------------------');
+            log += '\n-------------------------------------------------------------------------\n'+
+                'Start: '+start + '\n' +
+                'End:   '+end + '\n' +
+                'Check: '+check + '\n' +
+                '-------------------------------------------------------------------------' +
+                (start.getTime() < check.getTime() && end.getTime() > check.getTime());
 
-            console.log((start.getTime() < check.getTime() && end.getTime() > check.getTime()));
             return (start.getTime() < check.getTime() && end.getTime() > check.getTime());
 
         }
@@ -124,20 +127,18 @@ module.exports = function (app) {
                 var serverTZDiff = serverTZOffset-timezone.rawOffset-timezone.dstOffset;
                 now.setSeconds(now.getSeconds()-serverTZDiff);
                 yesterday.setSeconds(yesterday.getSeconds()-serverTZDiff);
-                hours.open.setSeconds(location.open.getSeconds()-serverTZDiff),
-                hours.close.setSeconds(location.close.getSeconds()-serverTZDiff),
+                hours.open.setSeconds(hours.open.getSeconds()-serverTZDiff),
+                hours.close.setSeconds(hours.close.getSeconds()-serverTZDiff),
 
-                console.log('TODAY IS:     '+now);
-                console.log('YESTERDAY IS: '+yesterday);
+                log += '\nTODAY IS:     '+now;
+                log += '\nYESTERDAY IS: '+yesterday;
 
                 if(hours.startdate <= now){
 
-                    console.log(hours.startdate+' <= '+now);
+                    log += '\n'+hours.startdate+' <= '+now;
 
                     if(location.repeat.enabled) {
-                        console.log('repeat is enabled');
-
-                        console.log(location.repeat.selected+' -- '+now.getDay());
+                        log += '\nrepeat is enabled: '+location.repeat.selected;
 
                         //check if today or yesterday are in repeat array
                         var idxToday = location.repeat.selected.indexOf(now.getDay()) > -1;
@@ -147,14 +148,14 @@ module.exports = function (app) {
 
                         if (idxToday || idxYesterday) {
                             if(idxToday){
-                                console.log('Today is in repeat array '+location.repeat.selected);
+                                log += '\nToday is in repeat array '+location.repeat.selected;
                                 openFromToday = withinHours(now, hours.open, hours.close);
                             }
                             if(idxYesterday){
-                                console.log('Yesterday is in repeat array '+location.repeat.selected);
+                                log += '\nYesterday is in repeat array '+location.repeat.selected;
                                 var dayDiff = hours.close.getDay()-hours.open.getDay();
                                 if(dayDiff == 1 || dayDiff == -7){
-                                    console.log('Yesterday\'s hour rollover into today');
+                                    log += '\nYesterday\'s hours rollover into today';
                                     openFromYesterday = withinHours(now, hours.open, hours.close, -1);
                                 }
                             }
@@ -183,7 +184,7 @@ module.exports = function (app) {
 
                             var dayDiff = hours.close.getDay()-hours.open.getDay();
                             if(dayDiff == 1 || dayDiff == -7){
-                                console.log('Yesterday\'s hour rollover into today');
+                                log += '\nYesterday\'s hour rollover into today';
                                 openFromYesterday = withinHours(now, hours.open, hours.close, -1);
                             }
                         }
@@ -199,6 +200,7 @@ module.exports = function (app) {
                 deferred.reject(err);
             });
 
+        console.log(log);
         return deferred.promise;
 
     };
@@ -225,8 +227,6 @@ module.exports = function (app) {
 
     // ALL
     api.schedules = function (req, res) {
-
-        console.log('---------------------------------------------------------------------------');
 
         var user = api.stripUserData(req.query);
 
