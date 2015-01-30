@@ -7,6 +7,8 @@ module.exports = function (app) {
         Restaurant = mongoose.models.Restaurant,
         api = {};
 
+
+
     api.getTimezone = function(location){
 
         var deferred = q.defer();
@@ -69,15 +71,10 @@ module.exports = function (app) {
     //todo: use virtuals for this?
     api.locationIsOpen = function(location){
 
+
+
         var deferred = q.defer();
-
-        var hours = {
-            open:  location.open,
-            close:  location.close,
-            startdate:  location.startdate,
-            enddate:  location.enddate
-        }
-
+        var hours = {};
         var isOpen = false;
         var now = new Date();
         var yesterday = new Date(now)
@@ -120,6 +117,12 @@ module.exports = function (app) {
                 var serverTZDiff = serverTZOffset-timezone.rawOffset-timezone.dstOffset;
                 now.setSeconds(now.getSeconds()-serverTZDiff);
                 yesterday.setSeconds(yesterday.getSeconds()-serverTZDiff);
+                hours = {
+                    open:  location.open.setSeconds(location.open.getSeconds()-serverTZDiff),
+                    close:  location.close.setSeconds(location.close.getSeconds()-serverTZDiff),
+                    startdate:  location.startdate,
+                    enddate:  location.enddate
+                }
 
                 console.log('TODAY IS:     '+now);
                 console.log('YESTERDAY IS: '+yesterday);
@@ -130,6 +133,8 @@ module.exports = function (app) {
 
                     if(location.repeat.enabled) {
                         console.log('repeat is enabled');
+
+                        console.log(location.repeat.selected+' -- '+now.getDay());
 
                         //check if today or yesterday are in repeat array
                         var idxToday = location.repeat.selected.indexOf(now.getDay()) > -1;
@@ -217,6 +222,8 @@ module.exports = function (app) {
 
     // ALL
     api.schedules = function (req, res) {
+
+        console.log('---------------------------------------------------------------------------');
 
         var user = api.stripUserData(req.query);
 
