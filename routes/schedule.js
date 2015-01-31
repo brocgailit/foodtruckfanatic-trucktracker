@@ -193,6 +193,7 @@ module.exports = function (app) {
 
                     }
                 }
+                console.log(log);
 
                 deferred.resolve(isOpen);
             })
@@ -200,7 +201,7 @@ module.exports = function (app) {
                 deferred.reject(err);
             });
 
-        console.log(log);
+
         return deferred.promise;
 
     };
