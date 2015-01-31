@@ -119,16 +119,24 @@ module.exports = function (app) {
 
         }
 
+        var setTZOffset = function(date, offset){
+            date.setSeconds(date.getSeconds()-offset);
+        }
+
         api.getTimezone(location)
             .then( function(timezone){
 
                 //adjsut UTC to truck's local time to check days and hours
                 var serverTZOffset = now.getTimezoneOffset()*-60;
                 var serverTZDiff = serverTZOffset-timezone.rawOffset-timezone.dstOffset;
-                now.setSeconds(now.getSeconds()-serverTZDiff);
-                yesterday.setSeconds(yesterday.getSeconds()-serverTZDiff);
-                hours.open.setSeconds(hours.open.getSeconds()-serverTZDiff),
-                hours.close.setSeconds(hours.close.getSeconds()-serverTZDiff),
+
+                //todo: use iterator for this
+                setTZOffset(now,serverTZOffset);
+                setTZOffset(yesterday,serverTZOffset);
+                setTZOffset(hours.open,serverTZOffset);
+                setTZOffset(hours.close,serverTZOffset);
+                setTZOffset(hours.startdate,serverTZOffset);
+                setTZOffset(hours.enddate,serverTZOffset);
 
                 log += '\nTODAY IS:     '+now;
                 log += '\nYESTERDAY IS: '+yesterday;
