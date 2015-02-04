@@ -131,12 +131,12 @@ module.exports = function (app) {
                 var serverTZDiff = serverTZOffset-timezone.rawOffset-timezone.dstOffset;
 
                 //todo: use iterator for this
-                setTZOffset(now,serverTZOffset);
-                setTZOffset(yesterday,serverTZOffset);
-                setTZOffset(hours.open,serverTZOffset);
-                setTZOffset(hours.close,serverTZOffset);
-                setTZOffset(hours.startdate,serverTZOffset);
-                setTZOffset(hours.enddate,serverTZOffset);
+                setTZOffset(now,serverTZDiff);
+                setTZOffset(yesterday,serverTZDiff);
+                setTZOffset(hours.open,serverTZDiff);
+                setTZOffset(hours.close,serverTZDiff);
+                setTZOffset(hours.startdate,serverTZDiff);
+                setTZOffset(hours.enddate,serverTZDiff);
 
                 log += '\nTODAY IS:     '+now;
                 log += '\nYESTERDAY IS: '+yesterday;
@@ -162,6 +162,10 @@ module.exports = function (app) {
                             if(idxYesterday){
                                 log += '\nYesterday is in repeat array '+location.repeat.selected;
                                 var dayDiff = hours.close.getDay()-hours.open.getDay();
+                                log += '\nday diff:'+dayDiff;
+                                log += '\nclose day: '+hours.close.getDay();
+                                log += '\nopen day: '+hours.open.getDay();
+
                                 if(dayDiff == 1 || dayDiff == -7){
                                     log += '\nYesterday\'s hours rollover into today';
                                     openFromYesterday = withinHours(now, hours.open, hours.close, -1);
