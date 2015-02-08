@@ -280,12 +280,13 @@ module.exports = function (app) {
                                         .then(function(open){
                                             elem.isOpen = open;
                                             deferred.resolve(open);
-                                            promises.push(deferred.promise);
+
                                         })
                                         .catch(function (err){
-                                            deferred.reject(err);
-                                            promises.push(deferred.promise);
+                                            deferred.reject(err);;
                                         });
+
+                                    promises.push(deferred.promise);
                                 });
 
                                 q.all(promises)
@@ -295,7 +296,6 @@ module.exports = function (app) {
                                     .catch(function(err){
                                         res.status(404).json(err)
                                     });
-
                             });
 
                         }
