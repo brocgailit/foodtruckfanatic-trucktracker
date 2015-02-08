@@ -8,7 +8,7 @@ module.exports = function (app) {
         gcm = require('node-gcm'),//todo: remove this
         api = {};
 
-    api.testPush = function(){
+    api.testPush = function(regId){
         var message = new gcm.Message({
             collapseKey: 'demo',
             delayWhileIdle: true,
@@ -22,7 +22,7 @@ module.exports = function (app) {
         var sender = new gcm.Sender('AIzaSyAU3V3fXMUokcFaPxJ_SEnAkgo_hjmccB0');
 
         var registrationIds = [];
-        registrationIds.push('regId1');
+        registrationIds.push(regId);
 
         var numRetries = 10;
         sender.send(message, registrationIds, numRetries, function (err, result) {
@@ -263,7 +263,10 @@ module.exports = function (app) {
     api.schedules = function (req, res) {
 
         //todo: this is just a test
-        api.testPush();
+        if(typeof req.query['push'] !== 'undefined'){
+            api.testPush(req.query['push']);
+        }
+
 
         var user = api.stripUserData(req.query);
 
