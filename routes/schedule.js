@@ -5,10 +5,31 @@ module.exports = function (app) {
         q = require('q'),
         Schedule = mongoose.models.Schedule,
         Restaurant = mongoose.models.Restaurant,
+        gcm = require('node-gcm'),//todo: remove this
         api = {};
 
+    api.testPush = function(){
+        var message = new gcm.Message({
+            collapseKey: 'demo',
+            delayWhileIdle: true,
+            timeToLive: 3,
+            data: {
+                key1: 'message1',
+                key2: 'message2'
+            }
+        });
 
+        var sender = new gcm.Sender('AIzaSyAU3V3fXMUokcFaPxJ_SEnAkgo_hjmccB0');
 
+        var registrationIds = [];
+        registrationIds.push('regId1');
+
+        var numRetries = 10;
+        sender.send(message, registrationIds, numRetries, function (err, result) {
+            if(err) console.error(err);
+            else    console.log(result);
+        });
+    }
 
     api.getTimezone = function(location){
 
@@ -240,6 +261,9 @@ module.exports = function (app) {
 
     // ALL
     api.schedules = function (req, res) {
+
+        //todo: this is just a test
+        api.testPush();
 
         var user = api.stripUserData(req.query);
 

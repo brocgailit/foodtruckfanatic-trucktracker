@@ -18,6 +18,7 @@
     "mongodb": "~1.3.23",
     "mongoose": "latest",
     "morgan": "latest",
+    "node-gcm": "^0.9.14",
     "q": "~1.01"
   },
   "devDependencies": {
