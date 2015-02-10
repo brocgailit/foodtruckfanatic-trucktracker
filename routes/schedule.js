@@ -442,11 +442,11 @@ module.exports = function (app) {
     api.deleteSchedule = function (req, res) {
 
         var id = req.params.id;
-        var user = api.stripUserData(req.params);
+        var user = api.stripUserData(req.query);
 
-        console.log(req.params);
+        console.log(req.query);
 
-        return Schedule.remove(req.params, function (err, schedule) {
+        return Schedule.remove(req.query, function (err, schedule) {
                 if (!err) {
                     console.log("removed schedule(s)");
                     return res.send(204);
