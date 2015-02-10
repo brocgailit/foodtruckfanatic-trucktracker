@@ -461,5 +461,5 @@ module.exports = function (app) {
     app.get('/api/schedules/:id', api.schedule);
     app.post('/api/schedules', api.addSchedule);
     app.put('/api/schedules/:id', api.editSchedule);
-    app.delete('/api/schedules/:id', api.deleteSchedule);
+    app.delete('/api/schedules', api.deleteSchedule);
 };
