@@ -4,6 +4,7 @@ module.exports = function (app) {
         q = require('q'),
         Restaurant = mongoose.models.Restaurant,
         Truck = mongoose.models.Truck,
+        Schedule = mongoose.models.Schedule,
         api = {};
 
     // ALL
@@ -155,16 +156,51 @@ module.exports = function (app) {
     // DELETE
     api.deleteRestaurant = function (req, res) {
         var id = req.params.id;
-        return Restaurant.findById(id, function (err, restaurant) {
-            return restaurant.remove(function (err) {
-                if (!err) {
-                    console.log("removed restaurant");
-                    return res.send(204);
-                } else {
-                    console.log(err);
-                    return res.json(500, err);
-                }
-            });
+
+        Restaurant.findById(id, function (err, restaurant) {
+
+            //remove trucks
+            return Truck.find({business:restaurant._id}, function(err, trucks){
+
+                var promises = [];
+
+                trucks.forEach(function(truck, idx, arr) {
+                    var deferred = q.defer()
+                    Schedule.remove({truck:truck._id}, function(err){
+                        if(!err){
+                            deferred.resolve(truck._id)
+                        }else{
+                            deferred.reject(err);
+                        }
+                    })
+                    promises.push(deferred);
+                });
+
+                q.all(promises).then(function(){
+
+                    Truck.remove({business:restaurant._id}, function(err){
+                        if (!err) {
+                            restaurant.remove(function (err) {
+                                if (!err) {
+                                    console.log("removed restaurant");
+                                    return res.send(204);
+                                } else {
+                                    console.log(err);
+                                    return res.json(500, err);
+                                }
+                            });
+                        } else {
+                            console.log(err);
+                            return res.json(500, err);
+                        }
+                    })
+
+
+                })
+
+            })
+
+
         });
 
     };

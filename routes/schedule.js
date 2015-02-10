@@ -442,11 +442,8 @@ module.exports = function (app) {
     api.deleteSchedule = function (req, res) {
 
         var id = req.params.id;
-        var user = api.stripUserData(req.query);
 
-        console.log(req.query);
-
-        return Schedule.remove(req.query, function (err, schedule) {
+        return Schedule.remove({id: req.params.id}, function (err, schedule) {
                 if (!err) {
                     console.log("removed schedule(s)");
                     return res.send(204);
@@ -463,5 +460,5 @@ module.exports = function (app) {
     app.get('/api/schedules/:id', api.schedule);
     app.post('/api/schedules', api.addSchedule);
     app.put('/api/schedules/:id', api.editSchedule);
-    app.delete('/api/schedules', api.deleteSchedule);
+    app.delete('/api/schedules/:id', api.deleteSchedule);
 };

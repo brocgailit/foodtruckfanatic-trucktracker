@@ -121,16 +121,23 @@ module.exports = function (app) {
     // DELETE
     api.deleteTruck = function (req, res) {
         var id = req.params.id;
-        return Truck.findById(id, function (err, truck) {
-            return truck.remove(function (err) {
-                if (!err) {
-                    console.log("removed truck");
-                    return res.send(204);
-                } else {
-                    console.log(err);
+        Truck.findById(id, function (err, truck) {
+            Schedule.remove({truck:id}, function(err){
+                if(!err) {
+                    truck.remove(function (err) {
+                        if (!err) {
+                            console.log("removed truck");
+                            return res.send(204);
+                        } else {
+                            console.log(err);
+                            return res.json(500, err);
+                        }
+                    });
+                }else{
                     return res.json(500, err);
                 }
-            });
+            })
+
         });
 
     };
