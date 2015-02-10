@@ -440,17 +440,18 @@ module.exports = function (app) {
 
     // DELETE
     api.deleteSchedule = function (req, res) {
+
         var id = req.params.id;
-        return Schedule.findById(id, function (err, schedule) {
-            return schedule.remove(function (err) {
+        var user = api.stripUserData(req.params);
+
+        return Schedule.remove(req.params, function (err, schedule) {
                 if (!err) {
-                    console.log("removed schedule");
+                    console.log("removed schedule(s)");
                     return res.send(204);
                 } else {
                     console.log(err);
                     return res.json(500, err);
                 }
-            });
         });
 
     };
