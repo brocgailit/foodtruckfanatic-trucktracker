@@ -443,7 +443,7 @@ module.exports = function (app) {
 
         var id = req.params.id;
 
-        return Schedule.remove({id: req.params.id}, function (err, schedule) {
+        return Schedule.remove({_id: req.params.id}, function (err, schedule) {
                 if (!err) {
                     console.log("removed schedule(s)");
                     return res.send(204);
