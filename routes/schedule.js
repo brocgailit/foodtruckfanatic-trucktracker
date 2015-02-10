@@ -444,6 +444,8 @@ module.exports = function (app) {
         var id = req.params.id;
         var user = api.stripUserData(req.params);
 
+        console.log(req.params);
+
         return Schedule.remove(req.params, function (err, schedule) {
                 if (!err) {
                     console.log("removed schedule(s)");
